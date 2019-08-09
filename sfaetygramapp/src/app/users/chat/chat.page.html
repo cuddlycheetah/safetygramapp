@@ -5,14 +5,19 @@
         <ion-icon slot="icon-only" name="arrow-round-back"></ion-icon>
       </ion-button>
     </ion-buttons>
-    <ion-title>Chat</ion-title>
+    <mat-card-header>
+      <mat-card-title *ngIf="basicUserNamesets.length > 0">{{ basicUserNamesets[0].firstName }} {{ basicUserNamesets[0].lastName }}</mat-card-title>
+      <mat-card-subtitle *ngIf="basicUserInfos.length > 0">{{ basicUserInfos[0].bio }}</mat-card-subtitle>
+    </mat-card-header>
   </ion-toolbar>
 </ion-header>
 
-<ion-content fullscreen>
-  <app-message [message]="message" *ngFor="let message of cachedData"></app-message>
-  <ion-infinite-scroll threshold="100px" position="top"  (ionInfinite)="loadData($event)" #scroll>
-    <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Loading more data...">
-    </ion-infinite-scroll-content>
-  </ion-infinite-scroll>
+<ion-content fullscreen style="top:0;left:0;width:100%; height: 100%; background: url('/assets/background.jpg') no-repeat center center scroll;background-size: cover;">
+  <div>
+    <app-message [message]="message" *ngFor="let message of cachedData"></app-message>
+    <ion-infinite-scroll threshold="100px" position="top"  (ionInfinite)="loadData($event)" #scroll>
+      <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Loading more data...">
+      </ion-infinite-scroll-content>
+    </ion-infinite-scroll>
+  </div>
 </ion-content>

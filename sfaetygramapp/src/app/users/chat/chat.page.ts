@@ -17,13 +17,13 @@ import { CollectionViewer } from '@angular/cdk/collections';
 export class ChatPage implements OnInit {
 
   id = '';
-  basicUser: any;
-  basicUserInfos: any[];
-  basicUserNamesets: any[];
-  messages: any[];
+  basicUser: any = {};
+  basicUserInfos: any[] = [];
+  basicUserNamesets: any[] = [];
+  messages: any[] = [];
   private PAGE_SIZE = 50;
 
-  private cachedData: Message[] = [];
+  cachedData: Message[] = [];
 
   @ViewChild('scroll', { static: true })
   scroll: IonInfiniteScroll;
@@ -34,7 +34,7 @@ export class ChatPage implements OnInit {
     private http: HttpClient,
     private loadingCtrl: LoadingController,
     private alertCtrl: AlertController,
-    private location: Location,
+    public location: Location,
   ) { }
 
   ngOnInit() {
@@ -110,6 +110,15 @@ export interface Message {
 
   deleted: boolean;
   deletedAt: Date;
+  createdAt: Date;
 
   hasEdits: boolean;
 };
+export interface MessageEdit {
+  id: number;
+  messageId: number;
+  chatId: number;
+
+  createdAt: Date;
+  content: string;
+}

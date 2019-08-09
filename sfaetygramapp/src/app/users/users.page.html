@@ -9,7 +9,7 @@
     <button mat-icon-button matSuffix (click)="searchTerm=''">
       <mat-icon>cancel</mat-icon>
     </button>
-    <input matInput placeholder="Suche..." type="search" [(ngModel)]="searchTerm" #searchBar (input)="filter(searchBar.value)">
+    <input matInput placeholder="Suche..." type="search" [(ngModel)]="searchTerm" #searchBar (input)="filter()">
     <button mat-icon-button matPrefix>
       <mat-icon>search</mat-icon>
     </button>
