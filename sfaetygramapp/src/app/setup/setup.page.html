@@ -42,12 +42,12 @@
     <p>Setup abgeschlossen, bitte ein Interface Passwort setzen</p>
 
     <form [formGroup]="interfacePasswordGroup">
-        <mat-form-field>
-          <input matInput placeholder="Passwort" formControlName="password" required>
-        </mat-form-field>
-        <div>
-          <button mat-flat-button (click)="finishSetup()" [disabled]="interfacePasswordGroup.invalid">Fertig</button>
-        </div>
-      </form>
+      <mat-form-field>
+        <input matInput placeholder="Passwort" formControlName="password" required>
+      </mat-form-field>
+      <div>
+        <button mat-flat-button (click)="finishSetup()" [disabled]="interfacePasswordGroup.invalid">Fertig</button>
+      </div>
+    </form>
   </article>
 </ion-content>

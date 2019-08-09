@@ -22,6 +22,7 @@ import {
   MatCardModule,
 
   MatCheckboxModule,
+  MatProgressBarModule,
 } from '@angular/material';
 
 import { MatMomentDateModule } from '@angular/material-moment-adapter';
@@ -47,6 +48,7 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
     MatMomentDateModule,
     MatExpansionModule,
     MatRadioModule,
+    MatProgressBarModule,
 
     MatCardModule,
 
@@ -73,6 +75,7 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
     MatMomentDateModule,
     MatExpansionModule,
     MatRadioModule,
+    MatProgressBarModule,
 
     MatCardModule,
 

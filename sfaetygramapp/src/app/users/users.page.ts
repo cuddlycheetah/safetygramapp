@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AlertController, LoadingController, ModalController } from '@ionic/angular';
 import { HttpClient } from '@angular/common/http';
 import { finalize } from 'rxjs/operators';
+import { MenuService } from '../menu.service';
 
 @Component({
   selector: 'app-users',
@@ -19,6 +20,7 @@ export class UsersPage implements OnInit {
     private http: HttpClient,
     private loadingCtrl: LoadingController,
     private alertCtrl: AlertController,
+    public menuService: MenuService
   ) { }
 
 

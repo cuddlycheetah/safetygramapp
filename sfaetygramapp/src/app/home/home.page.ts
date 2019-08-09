@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { MenuService } from '../menu.service';
 
 @Component({
   selector: 'app-home',
@@ -7,6 +8,8 @@ import { Component } from '@angular/core';
 })
 export class HomePage {
 
-  constructor() {}
+  constructor(
+    public menuService: MenuService
+  ) {}
 
 }

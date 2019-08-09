@@ -12,6 +12,8 @@ const routes: Routes = [
   { path: 'home', canActivate: [ AuthGuard ], loadChildren: './home/home.module#HomePageModule' },
   { path: 'users', canActivate: [ AuthGuard ], loadChildren: './users/users.module#UsersPageModule' },
   { path: 'users/:id', canActivate: [ AuthGuard ], loadChildren: './users/chat/chat.module#ChatPageModule' },
+  { path: 'settings', canActivate: [ AuthGuard ], loadChildren: './settings/settings.module#SettingsPageModule' },
+  { path: 'update', canActivate: [ AuthGuard ], loadChildren: './update/update.module#UpdatePageModule' },
 
 ];
 

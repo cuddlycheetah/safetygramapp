@@ -24,3 +24,13 @@
 @import "~@ionic/angular/css/text-alignment.css";
 @import "~@ionic/angular/css/text-transformation.css";
 @import "~@ionic/angular/css/flex-utils.css";
+
+
+
+.mat-sidenav > .mat-drawer-inner-container {
+    display: flex;
+    flex-flow: column;
+}
+.mat-sidenav > .mat-drawer-inner-container > div {
+    flex: 1;
+}

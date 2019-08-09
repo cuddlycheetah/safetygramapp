@@ -1,9 +1,12 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectorRef, OnDestroy, ViewChild } from '@angular/core';
 
-import { Platform } from '@ionic/angular';
+import { Platform, IonMenu, MenuController } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { AuthService } from './auth.service';
+import { MediaMatcher } from '@angular/cdk/layout';
+import { MenuService } from './menu.service';
+import { MatSidenav } from '@angular/material';
 
 @Component({
   selector: 'app-root',
@@ -12,32 +15,31 @@ import { AuthService } from './auth.service';
 })
 export class AppComponent {
   public hiddenSidebar = true;
-  public appPages = [
-    {
-      title: 'Home',
-      url: '/home',
-      icon: 'home'
-    },
-    {
-      title: 'Benutzer',
-      url: '/users',
-      icon: 'people'
-    }
-  ];
 
+  @ViewChild('main', { static: true })
+  main: IonMenu;
+  @ViewChild('snav', { static: false })
+  snav: MatSidenav;
+
+  mobileQueryListener: () => void;
+  mobileQuery: MediaQueryList;
   constructor(
     private platform: Platform,
     private splashScreen: SplashScreen,
     private statusBar: StatusBar,
-    public authService: AuthService
+    public authService: AuthService,
+    public menuService: MenuService,
+    public menu: MenuController,
+    changeDetectorRef: ChangeDetectorRef, media: MediaMatcher,
   ) {
-    this.initializeApp();
-  }
-
-  initializeApp() {
     this.platform.ready().then(() => {
       this.statusBar.styleDefault();
       this.splashScreen.hide();
+
+      this.menuService.main = this.main;
+      this.menuService.snav = this.snav;
+      console.log('snav', this.snav);
+      this.menuService.initWithChangeDetectors(changeDetectorRef, media);
     });
   }
 

@@ -1,9 +1,10 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>Userliste</ion-title>
-  </ion-toolbar>
-</ion-header>
-
+<mat-toolbar-row>
+  <button [hidden]="!menuService.mobileQuery.matches" mat-icon-button (click)="menuService.toggle()">
+    <mat-icon>menu</mat-icon>
+  </button>
+  <h2 i18n="@@usersTitle">Benutzer</h2>
+</mat-toolbar-row>
+  
 <ion-content>
   <mat-form-field style="width: 100%;">
     <button mat-icon-button matSuffix (click)="searchTerm=''">

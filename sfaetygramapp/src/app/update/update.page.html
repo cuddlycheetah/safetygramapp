@@ -1,0 +1,22 @@
+<mat-toolbar-row>
+  <button [hidden]="!menuService.mobileQuery.matches" mat-icon-button (click)="menuService.toggle()">
+    <mat-icon>menu</mat-icon>
+  </button>
+  <h2 i18n="@@updatesTitle">Updates</h2>
+</mat-toolbar-row>
+
+<ion-content>
+  <div>
+    <button mat-raised-button color="primary" (click)="checkForUpdates()" i18n="@@updateCheck">
+      Auf Updates prüfen
+    </button>
+  </div>
+  <div>
+    <button mat-raised-button color="warn" (click)="restartServer()" i18n="@@updateRestart">
+      Safetygram Neustarten
+    </button>
+  </div>
+<!--
+  <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+-->
+</ion-content>

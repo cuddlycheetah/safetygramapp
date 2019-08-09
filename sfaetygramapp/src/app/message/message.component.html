@@ -14,14 +14,16 @@
     <mat-card-content *ngIf="message.hasEdits" [hidden]="editsHidden">
       <mat-list dense>
         <mat-list-item *ngFor="let edit of edits">
-          {{ edit.content }}
-          <span>{{ edit.createdAt }}</span>
+            <p *ngIf="message.type=='txt'">{{ edit.content }}</p>
+            <p *ngIf="message.type=='pic'">{{ edit.content[1] || edit.content }}</p>
+            <p *ngIf="message.type=='ukn'">{{ edit.content }}</p>
+          <span>{{ formatDate(edit.createdAt) }}</span>
         </mat-list-item>
       </mat-list>
     </mat-card-content>
     <mat-card-footer>
-      <span>{{ message.createdAt }}</span>
-      <span *ngIf="message.deleted">{{ message.deletedAt }}</span>
+      <span class="msgDate">{{ formatDate(message.createdAt) }}</span>
+      <span *ngIf="message.deleted">{{ formatDate(message.deletedAt) }}</span>
     </mat-card-footer>
     <mat-card-actions *ngIf="message.hasEdits">
       <button mat-button *ngIf="message.hasEdits" (click)="toggleEdits()">Edits</button>

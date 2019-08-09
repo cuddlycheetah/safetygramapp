@@ -16,6 +16,7 @@ export class AuthService {
   freshToken = new BehaviorSubject('');
   tgAuthState = new BehaviorSubject('');
   authSubject = new BehaviorSubject(false);
+  updateAvailableSubject = new BehaviorSubject(false);
   tokenValidationFailed = new BehaviorSubject(false);
 
   constructor(
@@ -65,6 +66,7 @@ export class AuthService {
     )
     .subscribe((res: any) => {
       this.tgAuthState.next(res.tgAuth);
+      this.updateAvailableSubject.next(res.updateAvailable);
       if (!!res.setup) {
         this.setupNavOkay.next(true);
         this.router.navigate(['setup']);

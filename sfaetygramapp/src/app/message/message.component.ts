@@ -33,4 +33,8 @@ export class MessageComponent implements OnInit {
       this.editsHidden = !this.editsHidden;
     }
   }
+  formatDate (inputDate: Date) {
+    const date = new Date(inputDate);
+    return `${ date.toLocaleDateString() } ${ date.toLocaleTimeString() }`;
+  }
 }
