@@ -1,0 +1,27 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Userliste</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <mat-form-field style="width: 100%;">
+    <button mat-icon-button matSuffix (click)="searchTerm=''">
+      <mat-icon>cancel</mat-icon>
+    </button>
+    <input matInput placeholder="Suche..." type="search" [(ngModel)]="searchTerm" #searchBar (input)="filter(searchBar.value)">
+    <button mat-icon-button matPrefix>
+      <mat-icon>search</mat-icon>
+    </button>
+  </mat-form-field>
+  <ion-refresher slot="fixed" (ionRefresh)="refreshData($event)">
+    <ion-refresher-content pullingIcon="arrow-dropdown" pullingText="Ziehen zum aktualisieren" refreshingSpinner="circles" refreshingText="Aktualisiere...">
+    </ion-refresher-content>
+  </ion-refresher>
+  <mat-nav-list>
+    <mat-list-item matRipple *ngFor="let user of filtered" routerDirection="forward" [routerLink]="[ user.id ]">
+      <h2 matLine>{{ user.usernamesets[0].firstName }} {{ user.usernamesets[0].lastName }}</h2>
+      <p matLine>@{{ user.usernamesets[0].username }}</p>
+    </mat-list-item>
+  </mat-nav-list>
+</ion-content>

@@ -1,0 +1,20 @@
+<!-- 
+  url("/assets/img/bg.jpg") center center / cover no-repeat fixed
+-->
+<ion-content style="position:absolute; top:0;left:0;width:100%; height: 100%; background: #cccccc no-repeat center center fixed;background-size: cover;">
+  <!-- [hidden]="!authService.hasTokenValidationFailed()" -->
+  <form [formGroup]="loginFormGroup" style="margin: auto;width: 264px;background: rgba(255,255,255,0.7);padding: 0 16px 16px 16px;">
+    <div text-center>
+      <img src="/assets/safetygramlogo.png">
+      <h3>Login</h3>
+    </div>
+    <p>
+      <mat-form-field>
+        <input matInput placeholder="Password" type="password" formControlName="password" required>
+      </mat-form-field>
+    </p>
+    <button mat-raised-button color="primary" type="submit" (click)="login()" [disabled]="loginFormGroup.invalid">
+      Anmelden
+    </button>
+  </form>
+</ion-content>

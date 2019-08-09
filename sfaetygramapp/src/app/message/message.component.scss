@@ -1,0 +1,28 @@
+mat-card {
+    max-width: 300px;
+    width: 80%;
+    padding-top: 5px;
+}
+mat-card[data-outgoing='false'] {
+}
+mat-card[data-outgoing='true'] {
+    margin-left: auto;
+}
+mat-card[data-deleted='true'] {
+    background-color: rgba(255.0,0,0.5);
+}
+mat-card[data-outgoing='false'] mat-card-footer span{
+    text-align: right;
+    display: block;
+}
+mat-card[data-outgoing='true'] mat-card-footer span{
+    text-align: left;
+    display: block;
+}
+.message {
+    width: 100%;
+    display: block;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    padding-top: 0.75rem;
+}

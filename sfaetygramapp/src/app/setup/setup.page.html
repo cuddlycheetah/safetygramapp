@@ -1,0 +1,53 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Enter your Telegram Account Data</ion-title>
+    <img style="max-width: 300px;" src="/assets/safetygramlogo.png">
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <article #phoneNumberStep [hidden]="paneIndex!=0">
+    <form [formGroup]="phoneNumberGroup">
+      <mat-form-field>
+        <input matInput placeholder="Telefonnummer" type="tel" formControlName="phoneNumber" required>
+      </mat-form-field>
+      <div>
+        <button mat-flat-button (click)="verifyPhoneNumber()">Code anfordern</button>
+      </div>
+    </form>
+  </article>
+  <article #codeStep [hidden]="paneIndex!=1">
+    <form [formGroup]="codeGroup">
+      <mat-form-field>
+        <input matInput placeholder="Code" type="text" pattern="[0-9]{5}" formControlName="code" required>
+      </mat-form-field>
+      <div>
+        <button mat-button>Zurück</button>
+        <button mat-flat-button (click)="verifyCode()">Bestätigen</button>
+      </div>
+    </form>
+  </article>
+  <article #passwordStep [hidden]="paneIndex!=2">
+    <form [formGroup]="passwordGroup">
+      <mat-form-field>
+        <input matInput placeholder="Passwort" type="password" formControlName="password" required>
+      </mat-form-field>
+      <div>
+        <button mat-button>Zurück</button>
+        <button mat-flat-button (click)="verifyPassword()">Bestätigen</button>
+      </div>
+    </form>
+  </article>
+  <article [hidden]="paneIndex!=3">
+    <p>Setup abgeschlossen, bitte ein Interface Passwort setzen</p>
+
+    <form [formGroup]="interfacePasswordGroup">
+        <mat-form-field>
+          <input matInput placeholder="Passwort" formControlName="password" required>
+        </mat-form-field>
+        <div>
+          <button mat-flat-button (click)="finishSetup()" [disabled]="interfacePasswordGroup.invalid">Fertig</button>
+        </div>
+      </form>
+  </article>
+</ion-content>

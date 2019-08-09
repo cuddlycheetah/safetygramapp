@@ -1,0 +1,16 @@
+<div class="message">
+  <mat-card [attr.data-outgoing]="message.isOutgoing" [attr.data-deleted]="message.deleted">
+    <mat-card-subtitle>
+      {{ message.userId }}
+    </mat-card-subtitle>
+    <mat-card-content *ngIf="message.type=='txt'">{{ message.content }}</mat-card-content>
+    <mat-card-content *ngIf="message.type=='pic'"><img [src]="'/api/file/fetch/' + message.content[1]">{{ message.content }}</mat-card-content>
+    <mat-card-content *ngIf="message.type=='stk'"><img [src]="'/api/file/fetch/' + message.content[0]"></mat-card-content>
+    <mat-card-content *ngIf="message.type=='gif'"><img [src]="'/api/file/fetch/' + message.content[1]">{{ message.content[0] }}</mat-card-content>
+    
+    <mat-card-footer>
+      <span>{{ message.createdAt }}</span>
+      <span *ngIf="message.deleted">{{ message.deletedAt }}</span>
+    </mat-card-footer>
+  </mat-card>
+</div>
