@@ -22,7 +22,8 @@ export class ChatPage implements OnInit {
   basicUserNamesets: any[] = [];
   messages: any[] = [];
   private PAGE_SIZE = 50;
-
+  messageCount = 0;
+  cPage = 0;
   cachedData: Message[] = [];
 
   @ViewChild('scroll', { static: true })
@@ -37,28 +38,22 @@ export class ChatPage implements OnInit {
     public location: Location,
   ) { }
 
-  ngOnInit() {
+  async ngOnInit() {
     this.id = this.route.snapshot.paramMap.get('id');
     this.loadBasicInfo();
-    this.loadPreviousPage();
   }
 
   private getPageForIndex(index: number): number {
     return Math.floor(index / this.PAGE_SIZE);
   }
-  public loadPreviousPage() {
-    const cPage = this.getPageForIndex(this.cachedData.length + 1);
-    return this.http.get(`/api/rest/message/@page/${ this.id }/${ cPage }`)
+  public async loadPreviousPage() {
+    return this.http.get(`/api/rest/message/@page/desc/${ this.id }/${ this.cPage++ }`)
     .subscribe((res: Message[]) => {
-      console.log('res', res.length);
-      // tslint:disable-next-line: prefer-for-of
-      for (let i = 0; i < res.length; i++) {
-        const j = (res.length - 1) - i;
-        res[j].content = JSON.parse(res[j].content);
-        this.cachedData.unshift(res[j]);
+      this.scroll.disabled = res.length === 0;
+      for(let message of res) {
+        message.content = JSON.parse(message.content);
+        this.cachedData.unshift(message);
       }
-      this.scroll.disabled = res.length < this.PAGE_SIZE;
-      console.log(this.cachedData);
     });
   }
   async loadBasicInfo() {
@@ -66,13 +61,13 @@ export class ChatPage implements OnInit {
       message: 'Lade User',
       translucent: true,
     });
-    // http://farnox.umann.it:46590/api/rest/message/@count?chatId=213676321
     await loading.present();
     return forkJoin(
       [
         this.http.get(`/api/rest/user/${ this.id }`),
         this.http.get(`/api/rest/userinfo/?userId=${ this.id }`),
         this.http.get(`/api/rest/usernameset/?userId=${ this.id }`),
+        this.http.get(`/api/rest/message/@count?chatId=${ this.id }`),
       ]
     )
     .pipe(
@@ -82,6 +77,8 @@ export class ChatPage implements OnInit {
       this.basicUser = res[0];
       this.basicUserInfos = res[1];
       this.basicUserNamesets = res[2];
+      this.messageCount = res[3];
+      this.loadPreviousPage();
       console.log('=> got response', res);
     });
   }
@@ -103,7 +100,7 @@ export interface Message {
   mediaAlbumId: string;
 
   isForwarded: boolean;
-  // forwardInfo: string;
+  forwardInfo: string;
 
   type: string;
   content: string;
