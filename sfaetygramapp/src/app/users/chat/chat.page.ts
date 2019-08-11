@@ -20,6 +20,8 @@ export class ChatPage implements OnInit {
   basicUser: any = {};
   basicUserInfos: any[] = [];
   basicUserNamesets: any[] = [];
+  basicChatNamesets: any[] = [];
+
   messages: any[] = [];
   private PAGE_SIZE = 50;
   messageCount = 0;
@@ -65,8 +67,9 @@ export class ChatPage implements OnInit {
     return forkJoin(
       [
         this.http.get(`/api/rest/user/${ this.id }`),
-        this.http.get(`/api/rest/userinfo/?userId=${ this.id }`),
-        this.http.get(`/api/rest/usernameset/?userId=${ this.id }`),
+        this.http.get(`/api/rest/userinfo/desc?userId=${ this.id }`),
+        this.http.get(`/api/rest/usernameset/desc?userId=${ this.id }`),
+        this.http.get(`/api/rest/chatnameset/desc?chatId=${ this.id }`),
         this.http.get(`/api/rest/message/@count?chatId=${ this.id }`),
       ]
     )
@@ -77,7 +80,8 @@ export class ChatPage implements OnInit {
       this.basicUser = res[0];
       this.basicUserInfos = res[1];
       this.basicUserNamesets = res[2];
-      this.messageCount = res[3];
+      this.basicChatNamesets = res[3];
+      this.messageCount = res[4];
       this.loadPreviousPage();
       console.log('=> got response', res);
     });

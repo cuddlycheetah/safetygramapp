@@ -21,7 +21,9 @@
   </ion-refresher>
   <mat-nav-list>
     <mat-list-item matRipple *ngFor="let user of filtered" routerDirection="forward" [routerLink]="[ user.id ]">
+      <img matListAvatar *ngIf="user.chatnamesets.length > 0" [src]="'/api/file/fetch/' + user.chatnamesets[0].photo">
       <h2 matLine>{{ user.usernamesets[0].firstName }} {{ user.usernamesets[0].lastName }}</h2>
+      <p matLine *ngIf="user.userinfos.length > 0">{{ user.userinfos[0].bio }}</p>
       <p matLine>@{{ user.usernamesets[0].username }}</p>
     </mat-list-item>
   </mat-nav-list>
