@@ -21,4 +21,14 @@
       <button mat-raised-button color="primary" (click)="changePW()" [disabled]="changePasswordGroup.invalid" i18n="@@settingsChangePWSubmit">Passwort ändern</button>
     </div>
   </form>
+  <form [formGroup]="changeBotTokenGroup">
+    <p>
+      <mat-form-field>
+        <input matInput placeholder="Bot Token" formControlName="botToken" required>
+      </mat-form-field>
+    </p>
+    <div>
+      <button mat-raised-button color="primary" (click)="changeBT()" [disabled]="changeBotTokenGroup.invalid" i18n="@@settingsChangeBTSubmit">Bot Token ändern</button>
+    </div>
+  </form>
 </ion-content>
