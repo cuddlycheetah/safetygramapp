@@ -2,33 +2,34 @@
   <button [hidden]="!menuService.mobileQuery.matches" mat-icon-button (click)="menuService.toggle()">
     <mat-icon>menu</mat-icon>
   </button>
-  <h2 i18n="@@settingsTitle">Einstellungen</h2>
+  <h2 translate>settings.title</h2>
 </mat-toolbar-row>
 
 <ion-content>
+  <pre>Database Size: {{ dbStats.fsSize }} MB</pre>
   <form [formGroup]="changePasswordGroup">
     <p>
       <mat-form-field>
-        <input matInput placeholder="Passwort" formControlName="password" required>
+        <input matInput [placeholder]="'auth.password' | translate" formControlName="password" required>
       </mat-form-field>
     </p>
     <p>
       <mat-form-field>
-        <input matInput placeholder="Passwort wiederholen" formControlName="confirm_password" required>
+        <input matInput [placeholder]="'auth.password2' | translate" formControlName="confirm_password" required>
       </mat-form-field>
     </p>
     <div>
-      <button mat-raised-button color="primary" (click)="changePW()" [disabled]="changePasswordGroup.invalid" i18n="@@settingsChangePWSubmit">Passwort ändern</button>
+      <button mat-raised-button color="primary" (click)="changePW()" [disabled]="changePasswordGroup.invalid">{{ 'auth.change_password' | translate }}</button>
     </div>
   </form>
   <form [formGroup]="changeBotTokenGroup">
     <p>
       <mat-form-field>
-        <input matInput placeholder="Bot Token" formControlName="botToken" required>
+        <input matInput [placeholder]="'settings.botToken' | translate" formControlName="botToken" required>
       </mat-form-field>
     </p>
     <div>
-      <button mat-raised-button color="primary" (click)="changeBT()" [disabled]="changeBotTokenGroup.invalid" i18n="@@settingsChangeBTSubmit">Bot Token ändern</button>
+      <button mat-raised-button color="primary" (click)="changeBT()" [disabled]="changeBotTokenGroup.invalid">{{ 'settings.botTokenChange' | translate }}</button>
     </div>
   </form>
 </ion-content>

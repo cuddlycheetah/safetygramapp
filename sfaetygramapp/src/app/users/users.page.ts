@@ -3,6 +3,7 @@ import { AlertController, LoadingController, ModalController } from '@ionic/angu
 import { HttpClient } from '@angular/common/http';
 import { finalize } from 'rxjs/operators';
 import { MenuService } from '../menu.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-users',
@@ -20,7 +21,8 @@ export class UsersPage implements OnInit {
     private http: HttpClient,
     private loadingCtrl: LoadingController,
     private alertCtrl: AlertController,
-    public menuService: MenuService
+    public menuService: MenuService,
+    private translate: TranslateService
   ) { }
 
 
@@ -29,9 +31,8 @@ export class UsersPage implements OnInit {
   }
 
   async refreshData(event) {
-    // dataMitarbeiter;
     const loading = await this.loadingCtrl.create({
-      message: 'Lade User',
+      message: this.translate.instant('users.loadingUser'),
     });
     await loading.present();
     this.http.get(`/api/crest/users`).pipe(

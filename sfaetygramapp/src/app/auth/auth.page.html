@@ -7,15 +7,15 @@
     <form [formGroup]="loginFormGroup" id="authForm">
       <div text-center>
         <img src="/assets/safetygramlogo.png">
-        <h1 i18n="@@authTitle">Authentifizierung</h1>
+        <h1 translate>auth.title</h1>
       </div>
       <p>
         <mat-form-field class="fullWidth">
-          <input matInput placeholder="Password" type="password" formControlName="password" required>
+          <input matInput [placeholder]="'auth.password' | translate" type="password" formControlName="password" required>
         </mat-form-field>
       </p>
       <p class="submitButtonRow">
-        <button class="submitButton" mat-raised-button color="primary" type="submit" (click)="login()" [disabled]="loginFormGroup.invalid" i18n="@@authLogin">Anmelden</button>
+        <button class="submitButton" mat-raised-button color="primary" type="submit" (click)="login()" [disabled]="loginFormGroup.invalid">{{ 'auth.login' | translate }}</button>
       </p>
       <mat-nav-list style="overflow: hidden;">
         <mat-list-item role="listheader">

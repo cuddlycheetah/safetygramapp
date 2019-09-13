@@ -3,6 +3,7 @@ import { FormControl, FormBuilder, FormGroup, Validators } from '@angular/forms'
 import { MatStep, MatVerticalStepper } from '@angular/material';
 import { AuthService } from '../auth.service';
 import { Router } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-setup',
@@ -26,7 +27,8 @@ export class SetupPage implements OnInit {
   constructor(
     public formBuilder: FormBuilder,
     public authService: AuthService,
-    public router: Router
+    public router: Router,
+    private translate: TranslateService
   ) {
     this.phoneNumberGroup = this.formBuilder.group({
       phoneNumber: ['', [

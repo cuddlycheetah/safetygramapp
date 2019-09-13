@@ -2,7 +2,7 @@
   <button [hidden]="!menuService.mobileQuery.matches" mat-icon-button (click)="menuService.toggle()">
     <mat-icon>menu</mat-icon>
   </button>
-  <h2 i18n="@@usersTitle">Benutzer</h2>
+  <h2 translate>users.title</h2>
 </mat-toolbar-row>
   
 <ion-content>
@@ -10,7 +10,7 @@
     <button mat-icon-button matSuffix (click)="searchTerm=''">
       <mat-icon>cancel</mat-icon>
     </button>
-    <input matInput placeholder="Suche..." type="search" [(ngModel)]="searchTerm" #searchBar (input)="filter()">
+    <input matInput [placeholder]="'users.searchPlaceholder' | translate" type="search" [(ngModel)]="searchTerm" #searchBar (input)="filter()">
     <button mat-icon-button matPrefix>
       <mat-icon>search</mat-icon>
     </button>

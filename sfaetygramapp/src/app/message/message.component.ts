@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Message, MessageEdit } from '../users/chat/chat.page';
 import { HttpClient } from '@angular/common/http';
+import { MatMenu } from '@angular/material';
 
 @Component({
   selector: 'app-message',
@@ -11,6 +12,10 @@ export class MessageComponent implements OnInit {
 
   @Input()
   public message: Message;
+
+  @Input()
+  public menu: MatMenu;
+
 
   edits: MessageEdit[] = [];
   editsHidden = true;

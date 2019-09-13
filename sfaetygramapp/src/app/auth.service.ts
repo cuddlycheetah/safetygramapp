@@ -5,7 +5,8 @@ import { AlertController, LoadingController } from '@ionic/angular';
 import { HttpClient } from '@angular/common/http';
 import { finalize, tap } from 'rxjs/operators';
 import { Router } from '@angular/router';
-
+import { TranslateService } from '@ngx-translate/core';
+import { marker } from '@biesbjerg/ngx-translate-extract-marker';
 
 @Injectable({
   providedIn: 'root'
@@ -24,6 +25,7 @@ export class AuthService {
     private loadingCtrl: LoadingController,
     private alertCtrl: AlertController,
     private router: Router,
+    private translate: TranslateService,
     @Inject(LOCAL_STORAGE) private storage: WebStorageService
   ) { }
   async init() {
@@ -34,7 +36,7 @@ export class AuthService {
       return; // * Dont Check if we dont have an Access Token
     }
     const loading = await this.loadingCtrl.create({
-      message: 'Überprüfe lokalen Token',
+      message: this.translate.instant('auth.checklocalstorage'), //marker('auth.checklocalstorage'),
       translucent: true,
     });
     await loading.present();
@@ -56,7 +58,7 @@ export class AuthService {
   }
   async getStatus() {
     const loading = await this.loadingCtrl.create({
-      message: 'Gathering Config',
+      message: this.translate.instant('auth.gatheringconfig'),
       translucent: true,
     });
     await loading.present();
@@ -80,7 +82,7 @@ export class AuthService {
 
   async verifyPhoneNumber(phoneNumber) {
     const loading = await this.loadingCtrl.create({
-      message: 'Bestätige Telefonnummer',
+      message: this.translate.instant('setup.verify.phonenumber'), //'Bestätige Telefonnummer',
       translucent: true,
     });
     await loading.present();
@@ -97,7 +99,7 @@ export class AuthService {
     }, async (err) => {
       console.error('oopsie happened', err);
       const alert = await this.alertCtrl.create({
-        header: 'Phone Number invalid',
+        header: this.translate.instant('setup.invalid.phonenumber'),
         message: err || 'invalid',
         buttons: ['OK'],
       });
@@ -106,7 +108,7 @@ export class AuthService {
   }
   async verifyPassword(password) {
     const loading = await this.loadingCtrl.create({
-      message: 'Bestätige Passwort',
+      message: this.translate.instant('setup.verify.password'), // 'Bestätige Passwort',
       translucent: true,
     });
     await loading.present();
@@ -123,7 +125,7 @@ export class AuthService {
     }, async (err) => {
       console.error('oopsie happened', err);
       const alert = await this.alertCtrl.create({
-        header: 'Password invalid',
+        header: this.translate.instant('setup.invalid.password'),
         message: err || 'invalid',
         buttons: ['OK'],
       });
@@ -132,7 +134,7 @@ export class AuthService {
   }
   async verifyCode(code) {
     const loading = await this.loadingCtrl.create({
-      message: 'Bestätige Code',
+      message: this.translate.instant('setup.verify.code'), // 'Bestätige Code',
       translucent: true,
     });
     await loading.present();
@@ -149,7 +151,7 @@ export class AuthService {
     }, async (err) => {
       console.error('oopsie happened', err);
       const alert = await this.alertCtrl.create({
-        header: 'Code invalid',
+        header: this.translate.instant('setup.invalid.code'),
         message: err || 'invalid',
         buttons: ['OK'],
       });
@@ -186,7 +188,7 @@ export class AuthService {
   }
   async login(password) {
     const loading = await this.loadingCtrl.create({
-      message: 'Anmelden...',
+      message: this.translate.instant('auth.loggingin'),
       translucent: true,
     });
     await loading.present();
@@ -210,7 +212,7 @@ export class AuthService {
         console.error('oopsie happened', err);
         const alert = await this.alertCtrl.create({
           header: 'Login failed',
-          message: err.error.data.alert || err,
+          message: err,
           buttons: ['OK'],
         });
         alert.present();

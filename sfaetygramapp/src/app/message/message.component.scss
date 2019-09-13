@@ -12,7 +12,7 @@ mat-card[data-outgoing='true'] {
     background-color: #2B5278;
 }
 mat-card[data-deleted='true'] {
-    background-color: rgba(255.0,0,0.5);
+    background-color: rgb(128, 0, 0);
 }
 mat-card[data-outgoing='false'] mat-card-footer span{
     text-align: right;
@@ -30,6 +30,34 @@ mat-card[data-outgoing='true'] mat-card-footer span{
     padding-top: 0.75rem;
     padding-bottom: 1rem;
 }
+mat-card-subtitle {
+    color: white;
+}
+mat-card-subtitle > forward-info {
+    color: white;
+    font-weight: bold;
+}
+
+// Footer Stuff
+mat-card-footer {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    color: white;
+}
+mat-card-footer > mat-icon {
+    font-size: 0.95rem !important;
+}
+mat-card[data-outgoing='false'] mat-card-footer button {
+    float: right;
+    display: block;
+}
+mat-card[data-outgoing='true'] mat-card-footer button {
+    float: left;
+    display: block;
+}
+
+// Date
 .msgDate {
     padding-left: 0.2rem;
     padding-right: 0.2rem;

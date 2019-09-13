@@ -23,10 +23,13 @@ import {
 
   MatCheckboxModule,
   MatProgressBarModule,
+  MatMenuModule,
+  MatTabsModule,
 } from '@angular/material';
 
 import { MatMomentDateModule } from '@angular/material-moment-adapter';
 import { ScrollingModule } from '@angular/cdk/scrolling';
+import { TranslateModule } from '@ngx-translate/core';
 @NgModule({
   imports: [
     MatTableModule,
@@ -77,10 +80,14 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
     MatRadioModule,
     MatProgressBarModule,
 
+    MatTabsModule,
     MatCardModule,
 
+    MatMenuModule,
     MatCheckboxModule,
     ScrollingModule,
+
+    TranslateModule,
   ],
   providers: [
     MatMomentDateModule

@@ -5,6 +5,7 @@ import { AuthService } from '../auth.service';
 import { AlertController, LoadingController } from '@ionic/angular';
 import { HttpClient } from '@angular/common/http';
 import { finalize } from 'rxjs/operators';
+import { TranslateService } from '@ngx-translate/core';
 
 function passwordConfirming(c: AbstractControl): any {
   if (!c.parent || !c) { return;}
@@ -27,6 +28,9 @@ export class SettingsPage implements OnInit {
 
   changePasswordGroup: FormGroup;
   changeBotTokenGroup: FormGroup;
+
+  public dbStats = { fsSize: -1, };
+
   constructor(
     public authService: AuthService,
     public menuService: MenuService,
@@ -34,6 +38,7 @@ export class SettingsPage implements OnInit {
     private http: HttpClient,
     private loadingCtrl: LoadingController,
     private alertCtrl: AlertController,
+    private translate: TranslateService
   ) {
     this.changePasswordGroup = this.formBuilder.group({
       password: [null, Validators.required],
@@ -46,17 +51,23 @@ export class SettingsPage implements OnInit {
 
   async ngOnInit() {
     const loading = await this.loadingCtrl.create({
-      message: 'Lade BotToken',
+      message: this.translate.instant('settings.bottoken.load'),
       translucent: true,
     });
     await loading.present();
     // STANDARD
-    return this.http.get(`/api/interface/bottoken`)
+    this.http.get(`/api/interface/bottoken`)
     .pipe(
       finalize(() => loading.dismiss())
     )
     .subscribe(async (res: any) => {
       this.changeBotTokenGroup.setValue({ botToken: res });
+    });
+
+    // DB STATS
+    this.http.get(`/api/v2/stats/db`)
+    .subscribe(async (res: any) => {
+      this.dbStats = res;
     });
   }
 
@@ -67,7 +78,7 @@ export class SettingsPage implements OnInit {
   async changeBT() {
     const botToken = this.changeBotTokenGroup.value.botToken;
     const loading = await this.loadingCtrl.create({
-      message: 'Setze BotToken',
+      message: this.translate.instant('settings.bottoken.set'),
       translucent: true,
     });
     await loading.present();
@@ -81,14 +92,14 @@ export class SettingsPage implements OnInit {
     .subscribe(
       async (res: any) => {
         const alert = await this.alertCtrl.create({
-          header: 'Erfolgreich',
+          header: this.translate.instant('settings.bottoken.success.alert.title'),
           message: undefined,
           buttons: ['OK'],
         });
         alert.present();
-      }, async (err) => {
+      }, async (err) => { // if the request fails, its propably because the server restarted
         const alert = await this.alertCtrl.create({
-          header: 'Erfolgreich gesetzt',
+          header: this.translate.instant('settings.bottoken.success.alert.title'),
           buttons: ['OK'],
         });
         alert.present();

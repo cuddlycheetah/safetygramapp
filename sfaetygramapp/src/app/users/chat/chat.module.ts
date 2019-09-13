@@ -8,6 +8,7 @@ import { IonicModule } from '@ionic/angular';
 import { ChatPage } from './chat.page';
 import { MaterialModule } from 'src/app/material.module';
 import { MessageComponent } from 'src/app/message/message.component';
+import { ForwardinfoComponent } from 'src/app/message/forwardinfo/forwardinfo.component';
 
 const routes: Routes = [
   {
@@ -24,6 +25,10 @@ const routes: Routes = [
     RouterModule.forChild(routes),
     MaterialModule
   ],
-  declarations: [ChatPage, MessageComponent]
+  declarations: [
+    ChatPage,
+    MessageComponent,
+    ForwardinfoComponent
+  ]
 })
 export class ChatPageModule {}

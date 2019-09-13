@@ -8,6 +8,7 @@ import { finalize } from 'rxjs/operators';
 import { forkJoin, Subscription, BehaviorSubject, Observable } from 'rxjs';
 import { DataSource } from '@angular/cdk/table';
 import { CollectionViewer } from '@angular/cdk/collections';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-chat',
@@ -24,6 +25,7 @@ export class ChatPage implements OnInit {
 
   messages: any[] = [];
   private PAGE_SIZE = 50;
+  selectedIndex = 0;
   messageCount = 0;
   cPage = 0;
   cachedData: Message[] = [];
@@ -38,6 +40,7 @@ export class ChatPage implements OnInit {
     private loadingCtrl: LoadingController,
     private alertCtrl: AlertController,
     public location: Location,
+    private translate: TranslateService
   ) { }
 
   async ngOnInit() {
@@ -52,15 +55,19 @@ export class ChatPage implements OnInit {
     return this.http.get(`/api/rest/message/@page/desc/${ this.id }/${ this.cPage++ }`)
     .subscribe((res: Message[]) => {
       this.scroll.disabled = res.length === 0;
-      for(let message of res) {
+      for (let message of res) {
         message.content = JSON.parse(message.content);
         this.cachedData.unshift(message);
       }
     });
   }
+  formatDate (inputDate: Date) {
+    const date = new Date(inputDate);
+    return `${ date.toLocaleDateString() } ${ date.toLocaleTimeString() }`;
+  }
   async loadBasicInfo() {
     const loading = await this.loadingCtrl.create({
-      message: 'Lade User',
+      message: this.translate.instant('users.chat.loading'),
       translucent: true,
     });
     await loading.present();

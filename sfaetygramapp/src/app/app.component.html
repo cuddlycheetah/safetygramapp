@@ -4,18 +4,28 @@
       <mat-toolbar>
         <img style="max-width: 300px;" src="/assets/safetygramlogo.png">
       </mat-toolbar>
+      <mat-form-field>
+        <mat-label translate>language.select</mat-label>
+        <select matNativeControl #langSelect (change)="setLanguage(langSelect.value)">
+          <option *ngFor="let lang of translate.getLangs()" [value]="lang" [selected]="lang === translate.currentLang">{{ 'language.'+lang | translate }}</option>
+        </select>
+        <div style="display:none; visibility: hidden;">
+          {{ 'language.de' | translate }}
+          {{ 'language.en' | translate }}
+        </div>
+      </mat-form-field>
       <mat-nav-list style="overflow-x: hidden; overflow-y: hidden;">
         <a mat-list-item routerDirection="root" routerLink="/home">
           <mat-icon matListIcon>home</mat-icon>
-          <h3 matLine i18n="@@homeTitle">Home</h3>
+          <h3 matLine translate>menu.home</h3>
         </a>
         <a mat-list-item routerDirection="root" routerLink="/users">
           <mat-icon matListIcon>people</mat-icon>
-          <h3 matLine i18n="@@usersTitle">Benutzer</h3>
+          <h3 matLine translate>menu.user</h3>
         </a>
         <a mat-list-item routerDirection="root" routerLink="/settings">
           <mat-icon matListIcon>settings</mat-icon>
-          <h3 matLine i18n="@@settingsTitle">Einstellungen</h3>
+          <h3 matLine translate>menu.settings</h3>
         </a>
         <!--<a mat-list-item routerDirection="root" routerLink="/update">
           <mat-icon matListIcon [matBadge]="authService.updateAvailableSubject.value ? '•' : undefined" matBadgeColor="warn">cloud_download</mat-icon>
@@ -26,14 +36,14 @@
       <mat-nav-list>
         <a mat-list-item (click)="logout()">
           <mat-icon matListIcon>logout</mat-icon>
-          <h3 matLine i18n="@@appLogout">Abmelden</h3>
+          <h3 matLine translate>menu.logout</h3>
         </a>
-        <a mat-list-item target="_blank" href="https://paypal.me/4thebadwoofsky">
+        <a mat-list-item target="_blank" href="https://paypal.me/schumannit">
           <mat-icon matListIcon>credit_card</mat-icon>
-          <h3 matLine i18n="@@settingsTitle">Donate</h3>
+          <h3 matLine translate>menu.donate</h3>
         </a>
         <a mat-list-item target="_blank" href="https://sch.umann.it">
-          <pre matLine i18n="@@credits">made by Cuddly Cheetah</pre>
+          <pre matLine>made by Cuddly Cheetah</pre>
         </a>
       </mat-nav-list>
     </mat-sidenav>

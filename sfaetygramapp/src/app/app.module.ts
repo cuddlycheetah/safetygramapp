@@ -9,12 +9,16 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { InterceptorProvider } from './interceptor.service';
 import { StorageServiceModule} from 'angular-webstorage-service';
 
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS, HttpClient } from '@angular/common/http';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MaterialModule } from './material.module';
+
+// import ngx-translate and the http loader
+import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 
 @NgModule({
   declarations: [AppComponent],
@@ -23,6 +27,13 @@ import { MaterialModule } from './material.module';
     BrowserModule,
     IonicModule.forRoot(),
     HttpClientModule,
+    TranslateModule.forRoot({
+        loader: {
+            provide: TranslateLoader,
+            useFactory: HttpLoaderFactory,
+            deps: [ HttpClient ]
+        }
+    }),
     AppRoutingModule,
     BrowserAnimationsModule,
     MaterialModule,
@@ -37,3 +48,7 @@ import { MaterialModule } from './material.module';
   bootstrap: [AppComponent]
 })
 export class AppModule {}
+
+export function HttpLoaderFactory(http: HttpClient) {
+  return new TranslateHttpLoader(http);
+}
