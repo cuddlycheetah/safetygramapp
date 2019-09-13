@@ -34,7 +34,7 @@
         </span>
       </span>
       <!--* Context Menu Button -->
-      <button mat-icon-button [mat-menu-trigger-for]="menu" matMenuTriggerData="message">
+      <button mat-icon-button [mat-menu-trigger-for]="menu" (menuOpened)="openedContextMenu()">
         <mat-icon>more_vert</mat-icon>
       </button>
     </mat-card-footer>

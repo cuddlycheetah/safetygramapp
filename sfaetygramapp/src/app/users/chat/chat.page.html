@@ -41,19 +41,23 @@
     </mat-tab-group>
     <!-- Chat History -->
     <section class="chatTab" [hidden]="selectedIndex != 0">
-      <mat-menu #appMenu="matMenu" yPosition="above">
-        <ng-template matMenuContent>
-          <button mat-menu-item translate>
+      <ion-content>
+        <ion-infinite-scroll threshold="100px" position="top" (ionInfinite)="loadData($event)" #scroll>
+          <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Loading more data...">
+          </ion-infinite-scroll-content>
+        </ion-infinite-scroll>
+        <app-message [message]="message" [menu]="appMenu" (menuOpened)="menuOpened($event)" *ngFor="let message of cachedData"></app-message>
+      </ion-content>
+    </section>
+    <mat-menu #appMenu="matMenu" yPosition="above">
+      <ng-template matMenuContent>
+        <!--
+          <button mat-menu-item translate (click)="ctxMenu_OpenInTG()">
             chat.message.menu.openintg
           </button>
-        </ng-template>
-      </mat-menu>
-      <app-message [message]="message" [menu]="appMenu" *ngFor="let message of cachedData"></app-message>
-      <ion-infinite-scroll threshold="100px" position="top"  (ionInfinite)="loadData($event)" #scroll>
-        <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Loading more data...">
-        </ion-infinite-scroll-content>
-      </ion-infinite-scroll>
-    </section>
+        -->
+      </ng-template>
+    </mat-menu>
     <!-- Identities -->
     <section class="chatTab" [hidden]="selectedIndex != 1">
       <h2 translate>chat.infos.identities</h2>

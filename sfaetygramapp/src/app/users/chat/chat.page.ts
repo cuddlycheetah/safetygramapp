@@ -24,6 +24,8 @@ export class ChatPage implements OnInit {
   basicChatNamesets: any[] = [];
 
   messages: any[] = [];
+  public contextMenuMessage = {};
+
   private PAGE_SIZE = 50;
   selectedIndex = 0;
   messageCount = 0;
@@ -94,9 +96,20 @@ export class ChatPage implements OnInit {
     });
   }
   async loadData(event) {
-    this.loadPreviousPage();
+    event.target.disabled = true;
+    await this.loadPreviousPage();
+
     event.target.complete();
-    // event.target.disabled = true;
+    event.target.disabled = false;
+  }
+
+  menuOpened (message) {
+    this.contextMenuMessage = message;
+    console.log('context menu message=', message);
+  }
+  ctxMenu_OpenInTG() {
+    // const url = `tg://openmessage?user_id=${ this.contextMenuMessage.chatId }&message_id=${ this.contextMenuMessage.id }`;
+    // window.open(url);
   }
 }
 export interface Message {

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { Message, MessageEdit } from '../users/chat/chat.page';
 import { HttpClient } from '@angular/common/http';
 import { MatMenu } from '@angular/material';
@@ -16,6 +16,8 @@ export class MessageComponent implements OnInit {
   @Input()
   public menu: MatMenu;
 
+  @Output()
+  public menuOpened = new EventEmitter();
 
   edits: MessageEdit[] = [];
   editsHidden = true;
@@ -26,6 +28,10 @@ export class MessageComponent implements OnInit {
 
   ngOnInit() {}
 
+  openedContextMenu() {
+    console.log(this.message);
+    this.menuOpened.emit(this.message);
+  }
   toggleEdits () {
     if (this.message.hasEdits) {
       if (this.edits.length === 0) {
