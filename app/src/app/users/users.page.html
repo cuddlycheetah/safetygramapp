@@ -1,0 +1,30 @@
+<mat-toolbar-row>
+  <button [hidden]="!menuService.mobileQuery.matches" mat-icon-button (click)="menuService.toggle()">
+    <mat-icon>menu</mat-icon>
+  </button>
+  <h2 translate>users.title</h2>
+</mat-toolbar-row>
+  
+<ion-content>
+  <mat-form-field style="width: 100%;">
+    <button mat-icon-button matSuffix (click)="searchTerm=''">
+      <mat-icon>cancel</mat-icon>
+    </button>
+    <input matInput [placeholder]="'users.searchPlaceholder' | translate" type="search" [(ngModel)]="searchTerm" #searchBar (input)="filter()">
+    <button mat-icon-button matPrefix>
+      <mat-icon>search</mat-icon>
+    </button>
+  </mat-form-field>
+  <ion-refresher slot="fixed" (ionRefresh)="refreshData($event)">
+    <ion-refresher-content pullingIcon="arrow-dropdown" pullingText="Ziehen zum aktualisieren" refreshingSpinner="circles" refreshingText="Aktualisiere...">
+    </ion-refresher-content>
+  </ion-refresher>
+  <mat-nav-list>
+    <mat-list-item matRipple *ngFor="let user of filtered" routerDirection="forward" [routerLink]="[ user.id ]">
+      <img matListAvatar *ngIf="user.chatnamesets.length > 0" [src]="'/api/file/fetch/' + user.chatnamesets[0].photo">
+      <h2 matLine>{{ user.usernamesets[0].firstName }} {{ user.usernamesets[0].lastName }}</h2>
+      <p matLine *ngIf="user.userinfos.length > 0">{{ user.userinfos[0].bio }}</p>
+      <p matLine>@{{ user.usernamesets[0].username }}</p>
+    </mat-list-item>
+  </mat-nav-list>
+</ion-content>

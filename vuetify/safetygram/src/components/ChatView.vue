@@ -1,0 +1,289 @@
+<template>
+  <v-flex>
+    <v-toolbar>
+      <v-toolbar-title>
+        <ApolloQuery :query="require('../graphql/NameResolution.gql')" :variables="{ chat: $route.params.id }">
+          <template v-slot="{ result: { loading, error, data } }">
+            <!-- Loading -->
+            <div v-if="loading" class="loading apollo">Loading Name...</div>
+            <!-- Error -->
+            <div v-else-if="error" class="error apollo">An error occurred</div>
+            <!-- Result -->
+            <div v-else-if="data" class="result apollo">{{ data.name.name }}</div>
+            <!-- No result -->
+            <div v-else class="no-result apollo">{{ $route.params.id }}</div>
+          </template>
+        </ApolloQuery>
+      </v-toolbar-title>
+
+      <v-spacer></v-spacer>
+
+      <v-toolbar-items>
+        <v-btn text>Link 1</v-btn>
+        <v-btn text>Link 2</v-btn>
+        <v-btn text>Link 3</v-btn>
+      </v-toolbar-items>
+
+      <template v-if="$vuetify.breakpoint.smAndUp">
+        <v-btn icon>
+          <v-icon>mdi-export-variant</v-icon>
+        </v-btn>
+        <v-btn icon>
+          <v-icon>mdi-delete-circle</v-icon>
+        </v-btn>
+        <v-btn icon>
+          <v-icon>mdi-plus-circle</v-icon>
+        </v-btn>
+      </template>
+    </v-toolbar>
+    <div class="chat-container infinite-wrapper">
+      <infinite-loading force-use-infinite-wrapper=".infinite-wrapper" direction="top" @infinite="infiniteHandler"></infinite-loading>
+      <div style="display: flex; flex-direction: column-reverse;">
+        <div class="message" :class="{ own: item.isOutgoing, deleted: item.deleted, [item.content._ ]: true }" v-for="(item, $index) in chatMsgs" :key="$index">
+          <div class="username" v-if="($index>0 && chatMsgs[$index+1] && chatMsgs[$index+1].from != item.from) || ($index == chatMsgs.length)">
+            <ApolloQuery
+              :query="require('../graphql/NameResolution.gql')"
+              :variables="{ chat: item.from }"
+            >
+              <template v-slot="{ result: { loading, error, data } }">
+                <!-- Loading -->
+                <div v-if="loading" class="loading apollo">Loading Name...</div>
+                <!-- Error -->
+                <div v-else-if="error" class="error apollo">An error occurred</div>
+                <!-- Result -->
+                <div v-else-if="data" class="result apollo">{{ data.name.name }}</div>
+                <!-- No result -->
+                <div v-else class="no-result apollo">{{ item.from }}</div>
+              </template>
+            </ApolloQuery>
+          </div>
+          <div style="margin-top: 5px"></div>
+          <div class="content">
+            <div v-if="item.content._ === 'messageText'" v-text="item.content.text.text"></div>
+            <div v-else-if="item.content._ === 'messagePhoto'">
+              <v-img v-bind:src="'/api/file/' + item.contentFiles[1]"></v-img>
+            </div>
+            <div v-else-if="item.content._ === 'messageVoiceNote'">
+              <audio v-bind:src="'/api/file/' + item.contentFiles[0]" controls></audio>
+            </div>
+            <div v-else-if="item.content._ === 'messageSticker'">
+              <img v-bind:src="'/api/file/' + item.contentFiles[0]">
+            </div>
+            <div v-else-if="item.content._ === 'messageAnimation'">
+              <video controls v-bind:poster="'/api/file/' + item.contentFiles[0]" v-bind:src="'/api/file/' + item.contentFiles[1]"></video>
+            </div>
+            <div v-else-if="item.content._ === 'messageVideo'">
+              <video controls v-bind:poster="'/api/file/' + item.contentFiles[0]" v-bind:src="'/api/file/' + item.contentFiles[1]"></video>
+            </div>
+            <div v-else v-html="item.content"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- <emoji-picker :show="emojiPanel" @close="toggleEmojiPanel" @click="addMessage"></emoji-picker> -->
+    <!-- <div class="typer">
+      <input
+        type="text"
+        placeholder="Type here..."
+        v-on:keyup.enter="sendMessage"
+        v-model="content"
+      />
+      <v-btn icon class="blue--text emoji-panel">
+        <v-icon>mood</v-icon>
+      </v-btn>
+    </div>-->
+  </v-flex>
+</template>
+<script>
+import gql from "graphql-tag";
+
+import InfiniteLoading from "vue-infinite-loading";
+
+const FETCH = gql`
+  query getMessages($chatid: MongoID!, $page: Int!) {
+    messages: messagePagination(
+      filter: { peer: $chatid }
+      sort: CREATEDAT_DESC
+      page: $page
+      perPage: 10
+    ) {
+      count
+      items {
+        id
+        _id
+        peer
+        from
+        fromType
+        content
+        contentFiles
+        edits
+        replyToMessageId
+        isOutgoing
+        createdAt
+        deleted
+        deletedAt
+      }
+    }
+  }
+`;
+
+export default {
+  data() {
+    return {
+      content: "",
+      chatMessages: [],
+      loading: false,
+      totalChatHeight: 0,
+      page: 1,
+      messages: { items: [] },
+    };
+  },
+  props: ["chatid"],
+  apollo: {
+    messages: {
+      query: FETCH,
+      variables() {
+        return {
+          chatid: this.$route.params.id,
+          page: 1
+        };
+      },
+      result() {
+        console.log(this.chatMsgs);
+      },
+    }
+  },
+  components: {
+    InfiniteLoading
+  },
+  computed: {
+    chatMsgs() {
+      let arr = this.messages.items;
+      return this.messages ? arr : [];
+    },
+  },
+  methods: {
+    infiniteHandler($state) {
+      this.page++;
+      this.$apollo.queries.messages
+      .fetchMore({
+        variables: {
+          chatid: this.$route.params.id,
+          page: this.page
+        },
+        // Transform the previous result with new data
+        updateQuery: (previousResult, { fetchMoreResult }) => {
+          //const hasMore = fetchMoreResult.tagsPage.hasMore
+
+          //this.showMoreEnabled = hasMore
+          if (fetchMoreResult.messages.items.length > 0)
+            $state.loaded();
+          else
+            $state.complete();
+          return {
+            messages: {
+              __typename: previousResult.messages.__typename,
+              count: previousResult.messages.count,
+              // Merging the tag list
+              items: [
+                ...previousResult.messages.items,
+                ...fetchMoreResult.messages.items
+              ]
+              //hasMore,
+            }
+          };
+        }
+      })
+      .then(() => {
+      });
+    }
+  }
+};
+</script>
+
+<style>
+.scrollable {
+  overflow-y: auto;
+  height: 90vh;
+}
+.typer {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  bottom: 0;
+  height: 4.9rem;
+  width: 100%;
+  background-color: #fff;
+  box-shadow: 0 -5px 10px -5px rgba(0, 0, 0, 0.2);
+}
+.typer .emoji-panel {
+  /*margin-right: 15px;*/
+}
+.typer input[type="text"] {
+  position: absolute;
+  left: 2.5rem;
+  padding: 1rem;
+  width: 80%;
+  background-color: transparent;
+  border: none;
+  outline: none;
+  font-size: 1.25rem;
+}
+.chat-container {
+  box-sizing: border-box;
+  height: calc(100vh - 9.5rem);
+  overflow-y: auto;
+  padding: 10px;
+  background-color: #f2f2f2;
+}
+.message {
+  margin-bottom: 3px;
+}
+.message.own {
+  text-align: right;
+}
+.message.own .content {
+  background-color: lightskyblue;
+}
+.message.deleted .content {
+  background-color: red;
+}
+.chat-container .username {
+  font-size: 18px;
+  font-weight: bold;
+}
+.chat-container .content {
+  padding: 8px;
+  background-color: lightgreen;
+  border-radius: 10px;
+  display: inline-block;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.14),
+    0 2px 1px -1px rgba(0, 0, 0, 0.12);
+  max-width: 50%;
+  word-wrap: break-word;
+}
+@media (max-width: 480px) {
+  .chat-container .content {
+    max-width: 60%;
+  }
+}
+
+.messageSticker {
+  min-height: 14rem;
+} .messageSticker img {
+  min-height: 14rem;
+  height: 14rem;
+}
+.messageVideo {
+  min-height: 14rem;
+} .messageVideo video {
+  min-height: 14rem;
+  height: 14rem;
+}
+.messageAnimation {
+  min-height: 14rem;
+}.messageAnimation video {
+  min-height: 14rem;
+  height: 14rem;
+}
+</style>
