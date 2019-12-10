@@ -19,7 +19,6 @@
 
 <script>
 import gql from "graphql-tag";
-import axios from 'axios';
 
 const FETCH = gql`{
     chatOverview {
@@ -37,16 +36,5 @@ export default {
         pollInterval: 5000
     }
   },
-  methods: {
-    importChat(chatId) {
-      axios.get('/api/import/chat/' + chatId, { headers: { authorization: localStorage.getItem('token')}})
-      .then(res => {
-        console.log(res.data)
-      }, err => {
-        console.log(err.response);
-        this.error = err.response.data
-      })
-    }
-  }
 };
 </script>

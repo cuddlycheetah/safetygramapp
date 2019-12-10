@@ -2,7 +2,10 @@
   <v-flex>
     <v-toolbar>
       <v-toolbar-title>
-        <ApolloQuery :query="require('../graphql/NameResolution.gql')" :variables="{ chat: $route.params.id }">
+        <ApolloQuery
+          :query="require('../graphql/NameResolutionChat.gql')"
+          :variables="{ peer: $route.params.id }"
+        >
           <template v-slot="{ result: { loading, error, data } }">
             <!-- Loading -->
             <div v-if="loading" class="loading apollo">Loading Name...</div>
@@ -42,8 +45,8 @@
         <div class="message" :class="{ own: item.isOutgoing, deleted: item.deleted, [item.content._ ]: true }" v-for="(item, $index) in chatMsgs" :key="$index">
           <div class="username" v-if="($index>0 && chatMsgs[$index+1] && chatMsgs[$index+1].from != item.from) || ($index == chatMsgs.length)">
             <ApolloQuery
-              :query="require('../graphql/NameResolution.gql')"
-              :variables="{ chat: item.from }"
+              :query="item.fromType == 'User' ? require('../graphql/NameResolutionUser.gql') : require('../graphql/NameResolutionChat.gql')"
+              :variables="{ peer: item.from }"
             >
               <template v-slot="{ result: { loading, error, data } }">
                 <!-- Loading -->
@@ -51,7 +54,7 @@
                 <!-- Error -->
                 <div v-else-if="error" class="error apollo">An error occurred</div>
                 <!-- Result -->
-                <div v-else-if="data" class="result apollo">{{ data.name.name }}</div>
+                <div v-else-if="data" class="result apollo">{{ data.name.name || `${ data.name.firstName } ${ data.name.lastName }` }}</div>
                 <!-- No result -->
                 <div v-else class="no-result apollo">{{ item.from }}</div>
               </template>
@@ -63,17 +66,20 @@
             <div v-else-if="item.content._ === 'messagePhoto'">
               <v-img v-bind:src="'/api/file/' + item.contentFiles[1]"></v-img>
             </div>
+            <div v-else-if="item.content._ === 'messageSticker'">
+              <img v-bind:src="'/api/file/' + item.contentFiles[0]">
+            </div>
             <div v-else-if="item.content._ === 'messageVoiceNote'">
               <audio v-bind:src="'/api/file/' + item.contentFiles[0]" controls></audio>
             </div>
-            <div v-else-if="item.content._ === 'messageSticker'">
-              <img v-bind:src="'/api/file/' + item.contentFiles[0]">
+            <div v-else-if="item.content._ === 'messageVideoNote'">
+              <video controls v-bind:poster="'/api/file/' + item.contentFiles[0]" v-bind:src="'/api/file/' + item.contentFiles[1]"></video>
             </div>
             <div v-else-if="item.content._ === 'messageAnimation'">
               <video controls v-bind:poster="'/api/file/' + item.contentFiles[0]" v-bind:src="'/api/file/' + item.contentFiles[1]"></video>
             </div>
             <div v-else-if="item.content._ === 'messageVideo'">
-              <video controls v-bind:poster="'/api/file/' + item.contentFiles[0]" v-bind:src="'/api/file/' + item.contentFiles[1]"></video>
+              <video controls v-bind:poster="'/api/file/' + item.contentFiles[0]" v-bind:src="'/api/file/' + (item.contentFiles[1] || item.contentFiles[0])"></video>
             </div>
             <div v-else v-html="item.content"></div>
           </div>
@@ -96,6 +102,7 @@
 </template>
 <script>
 import gql from "graphql-tag";
+import axios from 'axios';
 
 import InfiniteLoading from "vue-infinite-loading";
 
@@ -163,6 +170,15 @@ export default {
     },
   },
   methods: {
+    importChat() {
+      axios.get('/api/import/chat/' + this.$route.params.id, { headers: { authorization: localStorage.getItem('token')}})
+      .then(res => {
+        console.log(res.data)
+      }, err => {
+        console.log(err.response);
+        this.error = err.response.data
+      })
+    },
     infiniteHandler($state) {
       this.page++;
       this.$apollo.queries.messages

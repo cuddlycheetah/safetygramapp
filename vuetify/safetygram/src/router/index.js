@@ -9,7 +9,10 @@ import Dashboard from '../components/Dashboard.vue'
 import ChatOverview from '../components/ChatOverview.vue'
 import ChatView from '../components/ChatView.vue'
 
+import DeletedMessageOverview from '../components/DeletedMessageOverview.vue'
+
 import NotYetImplementedSite from '../components/NotYetImplementedSite.vue'
+import Settings from '../components/Settings.vue'
 Vue.use(VueRouter)
 
 const routes = [
@@ -60,11 +63,11 @@ const routes = [
       },
       {
         path: 'deletedmsgs',
-        component: NotYetImplementedSite
+        component: DeletedMessageOverview
       },
       {
         path: 'settings',
-        component: NotYetImplementedSite
+        component: Settings
       },
       {
         path: 'downloads',

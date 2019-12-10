@@ -1,5 +1,0 @@
-query chat ($chat: MongoID!) {
-  name: chatNamesetOne(sort:_ID_DESC, filter: { chat: $chat }) {
-    name
-  }
-}

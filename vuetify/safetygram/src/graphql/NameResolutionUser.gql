@@ -1,0 +1,6 @@
+query peer ($peer: MongoID!) {
+  name: userNamesetOne(sort:_ID_DESC, filter: { user: $peer }) {
+    firstName
+    lastName
+  }
+}
