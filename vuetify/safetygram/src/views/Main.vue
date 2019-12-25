@@ -29,6 +29,16 @@
             </v-list-item-content>
           </v-list-item>
         </template>
+
+        <v-divider dark class="my-4" />
+        <v-list-item link @click="logout()">
+          <v-list-item-action>
+            <v-icon>logout</v-icon>
+          </v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title class="grey--text">Logout</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
       </v-list>
     </v-navigation-drawer>
 

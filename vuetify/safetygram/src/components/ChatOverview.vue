@@ -2,6 +2,7 @@
 
   <div class="chat-overview">
     <v-list three-line>
+      <div v-if="this.$apollo.queries.chatOverview.loading" class="loading apollo">Loading Chats...</div>
       <template v-for="chat in chatOverview">
         <v-list-item :key="chat._id" v-bind:to="'/chats/' + chat._id">
           <v-list-item-avatar>

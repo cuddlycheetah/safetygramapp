@@ -1,7 +1,0 @@
-{
-  "name": "sfaetygramapp",
-  "integrations": {
-    "cordova": {}
-  },
-  "type": "angular"
-}

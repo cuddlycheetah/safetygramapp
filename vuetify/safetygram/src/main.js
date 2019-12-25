@@ -3,8 +3,8 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import { createProvider } from './vue-apollo'
-import vuetify from './plugins/vuetify';
-
+import vuetify from './plugins/vuetify'
+import VueTelInput from 'vue-tel-input'
 
 Vue.config.productionTip = false
 new Vue({
@@ -15,3 +15,5 @@ new Vue({
   render: h => h(App)
 })
 .$mount('#app')
+
+Vue.use(VueTelInput)

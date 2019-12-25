@@ -13,6 +13,10 @@ import DeletedMessageOverview from '../components/DeletedMessageOverview.vue'
 
 import NotYetImplementedSite from '../components/NotYetImplementedSite.vue'
 import Settings from '../components/Settings.vue'
+
+import SetupTelegram from '../components/SetupTelegram.vue'
+
+
 Vue.use(VueRouter)
 
 const routes = [
@@ -84,6 +88,10 @@ const routes = [
       {
         path: 'test',
         component: NotYetImplementedSite
+      },
+      {
+        path: 'setup',
+        component: SetupTelegram
       },
     ]
   }

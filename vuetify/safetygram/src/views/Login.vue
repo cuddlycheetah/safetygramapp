@@ -14,11 +14,11 @@
                       <v-icon>mdi-code-tags</v-icon>
                     </v-btn>
                   </template>
-                  <span>Source</span>
+                  <span>Source Code</span>
                 </v-tooltip>
               </v-toolbar>
               <v-card-text>
-                <v-form>
+                <v-form @submit="login" v-on:submit.prevent="send">
                   <v-text-field
                     id="password"
                     label="Password"
@@ -33,7 +33,7 @@
               </v-card-text>
               <v-card-actions>
                 <v-spacer />
-                <v-btn color="primary" @click="login">Login</v-btn>
+                <v-btn type="submit" color="primary" @click="login">Login</v-btn>
               </v-card-actions>
             </v-card>
           </v-col>
