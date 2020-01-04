@@ -49,8 +49,6 @@
 </template>
 
 <script>
-import axios from 'axios';
-
 export default {
   props: {
     source: String
@@ -80,13 +78,6 @@ export default {
     }
   },
   mounted() {
-    axios.get('/api/status', { headers: { authorization: localStorage.getItem('token')}})
-    .then(res => {
-      console.log(res.data)
-    }, err => {
-      console.log(err.response);
-      this.error = err.response.data
-    })
   },
   methods: {
     logout() {
