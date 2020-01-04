@@ -58,14 +58,13 @@ export default {
   data: () => ({
     drawer: null,
     items: [
-      { icon: "lightbulb_outline", text: "Dashboard", link: "/" },
-      { icon: "touch_app", text: "Raw Query Interface", link: "/rqi" },
+      { icon: "dashboard", text: "Dashboard", link: "/" },
+      { icon: "developer_mode", text: "Raw Query Interface", link: "/rqi" },
       //{ divider: true },
       //{ heading: "Labels" },
       //{ icon: "add", text: "Create new label", link: "" },
       { divider: true },
       { icon: "chat", text: "Chats", link: "/chats" },
-      { icon: "person", text: "Users", link: "/users" },
       { icon: "archive", text: "Archive", link: "/archive" },
       { icon: "delete", text: "Deleted Messages", link: "/deletedmsgs" },
       { divider: true },

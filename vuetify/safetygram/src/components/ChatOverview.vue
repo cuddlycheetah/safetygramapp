@@ -2,7 +2,7 @@
 
   <div class="chat-overview">
     <v-list three-line>
-      <div v-if="this.$apollo.queries.chatOverview.loading" class="loading apollo">Loading Chats...</div>
+      <v-skeleton-loader v-if="this.$apollo.queries.chatOverview.loading" class="mx-auto" type="list-item-avatar-three-line,list-item-avatar-three-line,list-item-avatar-three-line,list-item-avatar-three-line,list-item-avatar-three-line,list-item-avatar-three-line,list-item-avatar-three-line,list-item-avatar-three-line,list-item-avatar-three-line,list-item-avatar-three-line,list-item-avatar-three-line"></v-skeleton-loader>
       <template v-for="chat in chatOverview">
         <v-list-item :key="chat._id" v-bind:to="'/chats/' + chat._id">
           <v-list-item-avatar>
@@ -22,13 +22,13 @@
 import gql from "graphql-tag";
 
 const FETCH = gql`{
-    chatOverview {
-        _id
-        type
-        name
-        photo
-        user
-    }
+  chatOverview {
+    _id
+    type
+    name
+    photo
+    user
+  }
 }`
 export default {
   apollo: {

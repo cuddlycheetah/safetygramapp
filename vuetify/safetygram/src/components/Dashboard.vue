@@ -1,7 +1,31 @@
 <template>
-  <v-container>
-    Dashboard
-    <pre>{{ stats }}</pre>
+  <v-container class="grey lighten-5">
+    <v-row>
+      <v-col cols="12" xs="12" sm="4" md="3">
+        <v-card v-ripple>
+          <v-card-title>Database Size:</v-card-title>
+          <v-card-text>{{ stats.totalDBSize }} MB</v-card-text>
+        </v-card>
+      </v-col>
+      <v-col cols="12" xs="12" sm="4" md="3">
+        <v-card v-ripple>
+          <v-card-title>Chats:</v-card-title>
+          <v-card-text>{{ stats.chats }}</v-card-text>
+        </v-card>
+      </v-col>
+      <v-col cols="12" xs="12" sm="4" md="3">
+        <v-card v-ripple>
+          <v-card-title>Users:</v-card-title>
+          <v-card-text>{{ stats.users }}</v-card-text>
+        </v-card>
+      </v-col>
+      <v-col cols="12" xs="12" sm="4" md="3">
+        <v-card v-ripple>
+          <v-card-title>Deleted Messages:</v-card-title>
+          <v-card-text>{{ stats.messagesDeleted }} / {{ stats.messages }} total Messages</v-card-text>
+        </v-card>
+      </v-col>
+    </v-row>
 
     <v-bottom-sheet v-model="showSetupHint" persistent fullscreen>
       <v-sheet class="text-center" height="200px">
@@ -39,7 +63,6 @@ export default {
   },
   computed: {
     showSetupHint: function(){
-      console.log(this.stats)
       return this.stats ? this.stats.telegramStatus !== 'authorizationStateReady' : false
     }
   }

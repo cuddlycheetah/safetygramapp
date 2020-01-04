@@ -6,6 +6,8 @@ import { createProvider } from './vue-apollo'
 import vuetify from './plugins/vuetify'
 import VueTelInput from 'vue-tel-input'
 
+import moment from 'vue-moment'
+
 Vue.config.productionTip = false
 new Vue({
   router,
@@ -16,4 +18,5 @@ new Vue({
 })
 .$mount('#app')
 
+Vue.use(moment)
 Vue.use(VueTelInput)

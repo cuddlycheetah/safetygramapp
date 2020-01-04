@@ -21,23 +21,68 @@
 
       <v-spacer></v-spacer>
 
-      <v-toolbar-items>
-        <v-btn text>Import Chat</v-btn>
+      <!--<v-toolbar-items v-if="$vuetify.breakpoint.smAndUp">
+        <v-btn text @click="importChat">Import Chat</v-btn>
         <v-btn text>Button 2</v-btn>
-        <v-btn text>Button 3</v-btn>
-      </v-toolbar-items>
+      </v-toolbar-items>-->
 
-      <template v-if="$vuetify.breakpoint.smAndUp">
-        <v-btn icon>
-          <v-icon>mdi-export-variant</v-icon>
-        </v-btn>
-        <v-btn icon>
-          <v-icon>mdi-delete-circle</v-icon>
-        </v-btn>
-        <v-btn icon>
-          <v-icon>mdi-plus-circle</v-icon>
-        </v-btn>
-      </template>
+      <v-menu :close-on-content-click="false" :nudge-width="200" offset-y transition="slide-y-transition">
+        <template v-slot:activator="{ on }">
+          <v-btn icon color="primary" dark v-on="on">
+            <v-icon>menu</v-icon>
+          </v-btn>
+        </template>
+        <v-card>
+          <v-list>
+            <v-list-item>
+              <v-list-item-avatar>
+                <v-img v-bind:src="'/api/file/' + chatInfo.photo"></v-img>
+              </v-list-item-avatar>
+
+              <v-list-item-content>
+                <v-list-item-title>John Leider</v-list-item-title>
+                <v-list-item-subtitle>Founder of Vuetify.js</v-list-item-subtitle>
+              </v-list-item-content>
+
+              <!--<v-list-item-action>
+                <v-btn
+                  :class="fav ? 'red--text' : ''"
+                  icon
+                  @click="fav = !fav"
+                >
+                  <v-icon>favorite</v-icon>
+                </v-btn>
+              </v-list-item-action>-->
+            </v-list-item>
+          </v-list>
+
+          <v-divider></v-divider>
+
+          <v-list>
+            <v-list-item>
+              <v-list-item-action>
+                <v-switch v-model="message" color="purple"></v-switch>
+              </v-list-item-action>
+              <v-list-item-title>Enable messages</v-list-item-title>
+            </v-list-item>
+
+            <v-list-item>
+              <v-list-item-action>
+                <v-switch v-model="hints" color="purple"></v-switch>
+              </v-list-item-action>
+              <v-list-item-title>Enable hints</v-list-item-title>
+            </v-list-item>
+            <v-btn text @click="importChat">ImportChat</v-btn>
+          </v-list>
+
+          <v-card-actions>
+            <v-spacer></v-spacer>
+
+            <v-btn text @click="menu = false">Cancel</v-btn>
+            <v-btn color="primary" text @click="menu = false">Save</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-menu>
     </v-toolbar>
     <div class="chat-container infinite-wrapper">
       <infinite-loading force-use-infinite-wrapper=".infinite-wrapper" direction="top" @infinite="infiniteHandler"></infinite-loading>
@@ -76,7 +121,7 @@
               <video controls v-bind:poster="'/api/file/' + item.contentFiles[0]" v-bind:src="'/api/file/' + item.contentFiles[1]"></video>
             </div>
             <div v-else-if="item.content._ === 'messageAnimation'">
-              <video controls v-bind:poster="'/api/file/' + item.contentFiles[0]" v-bind:src="'/api/file/' + item.contentFiles[1]"></video>
+              <video loop autoplay controls v-bind:poster="'/api/file/' + item.contentFiles[0]" v-bind:src="'/api/file/' + item.contentFiles[1]"></video>
             </div>
             <div v-else-if="item.content._ === 'messageVideo'">
               <video controls v-bind:poster="'/api/file/' + item.contentFiles[0]" v-bind:src="'/api/file/' + (item.contentFiles[1] || item.contentFiles[0])"></video>
@@ -102,7 +147,6 @@
 </template>
 <script>
 import gql from "graphql-tag";
-import axios from 'axios';
 
 import InfiniteLoading from "vue-infinite-loading";
 
@@ -134,6 +178,23 @@ const FETCH = gql`
   }
 `;
 
+const importChat = gql`
+  mutation importChat($chatId: MongoID!) {
+    importChat(chatId: $chatId)
+  }
+`;
+const chatInfo = gql`
+  query chatInfo($chatid: MongoID!) {
+    chatInfo: chatOne(filter: { _id: $chatid }) {
+      storageLevel
+      type
+      lastUpdate
+      user
+      basicGroupId
+      supergroupId 
+    }
+  }
+`;
 export default {
   data() {
     return {
@@ -147,6 +208,16 @@ export default {
   },
   props: ["chatid"],
   apollo: {
+    chatInfo: {
+      query: chatInfo,
+      variables() {
+        return {
+          chatid: this.$route.params.id,
+        };
+      },result() {
+        console.log(this.chatInfo);
+      },
+    },
     messages: {
       query: FETCH,
       variables() {
@@ -155,9 +226,9 @@ export default {
           page: 1
         };
       },
-      result() {
+      /*result() {
         console.log(this.chatMsgs);
-      },
+      },*/
     }
   },
   components: {
@@ -171,12 +242,14 @@ export default {
   },
   methods: {
     importChat() {
-      axios.get('/api/import/chat/' + this.$route.params.id, { headers: { authorization: localStorage.getItem('token')}})
-      .then(res => {
-        console.log(res.data)
-      }, err => {
-        console.log(err.response);
-        this.error = err.response.data
+      this.$apollo.mutate({
+        mutation: importChat,
+        variables: {
+          chatId: this.$route.params.id,
+        },
+      })
+      .then(() => {
+        // TODO: add ui feedback for import start
       })
     },
     infiniteHandler($state) {
