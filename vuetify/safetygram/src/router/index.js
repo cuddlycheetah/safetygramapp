@@ -15,7 +15,8 @@ import SetupTelegram from '../components/SetupTelegram.vue'
 import Settings from '../components/Settings.vue'
 
 import RawQueryInterface from '../components/RawQueryInterface.vue'
-import NotYetImplementedSite from '../components/NotYetImplementedSite.vue'
+import HelpPage from '../components/HelpPage.vue'
+// import NotYetImplementedSite from '../components/NotYetImplementedSite.vue'
 
 
 Vue.use(VueRouter)
@@ -57,10 +58,10 @@ const routes = [
         component: ChatView,
         props: true
       },
-      {
+      /*{
         path: 'archive',
         component: NotYetImplementedSite
-      },
+      },*/
       {
         path: 'deletedmsgs',
         component: DeletedMessageOverview
@@ -69,17 +70,17 @@ const routes = [
         path: 'settings',
         component: Settings
       },
-      {
+      /*{
         path: 'downloads',
         component: NotYetImplementedSite
-      },
-      {
+      },*/
+      /*{
         path: 'files',
         component: NotYetImplementedSite
-      },
+      },*/
       {
         path: 'help',
-        component: NotYetImplementedSite
+        component: HelpPage
       },
       {
         path: 'setup',
