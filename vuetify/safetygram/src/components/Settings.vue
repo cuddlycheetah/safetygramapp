@@ -20,7 +20,7 @@
                 <!-- string -->
                 <template v-else-if="option.type === 'string'">
                   <v-text-field v-bind:placeholder="option.default" solo v-model="option.value"></v-text-field>
-                  <v-btn @click="changeOption(option.key, newPassword)">Change Value</v-btn>
+                  <v-btn @click="changeOption(option.key, option.value)">Change Value</v-btn>
                 </template>
                 <!-- filesize -->
                 <template v-else-if="option.type === 'filesize'">
@@ -85,6 +85,7 @@ export default {
   },
   methods: {
     changeOption(key, value) {
+      console.log('changeOption', key, value)
       this.$apollo.mutate({
         mutation: changeOption,
         variables: {
