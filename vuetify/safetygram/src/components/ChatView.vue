@@ -35,14 +35,14 @@
         <v-card>
           <v-list>
             <v-list-item>
-              <v-list-item-avatar>
+              <!--<v-list-item-avatar>
                 <v-img v-bind:src="'/api/file/' + chatInfo.photo"></v-img>
               </v-list-item-avatar>
 
               <v-list-item-content>
                 <v-list-item-title>John Leider</v-list-item-title>
                 <v-list-item-subtitle>Founder of Vuetify.js</v-list-item-subtitle>
-              </v-list-item-content>
+              </v-list-item-content>-->
 
               <!--<v-list-item-action>
                 <v-btn
@@ -59,7 +59,7 @@
           <v-divider></v-divider>
 
           <v-list>
-            <v-list-item>
+            <!--<v-list-item>
               <v-list-item-action>
                 <v-switch v-model="message" color="purple"></v-switch>
               </v-list-item-action>
@@ -71,8 +71,8 @@
                 <v-switch v-model="hints" color="purple"></v-switch>
               </v-list-item-action>
               <v-list-item-title>Enable hints</v-list-item-title>
-            </v-list-item>
-            <v-btn text @click="importChat">ImportChat</v-btn>
+            </v-list-item>-->
+            <v-btn text @click="importChat">Import Chat</v-btn>
           </v-list>
 
           <v-card-actions>
@@ -105,6 +105,23 @@
               </template>
             </ApolloQuery>
           </div>
+          <div class="forwardedfrom" v-if="item.forwardedType">
+            <ApolloQuery
+              :query="item.forwardedType == 'messageForwardOriginUser' ? require('../graphql/NameResolutionUser.gql') : require('../graphql/NameResolutionChat.gql')"
+              :variables="{ peer: item.forwardedFrom }"
+            >
+              <template v-slot="{ result: { loading, error, data } }">
+                <!-- Loading -->
+                <div v-if="loading" class="loading apollo">Loading Name...</div>
+                <!-- Error -->
+                <div v-else-if="error" class="error apollo">An error occurred</div>
+                <!-- Result -->
+                <div v-else-if="data" class="result apollo">{{ data.name.name || `${ data.name.firstName } ${ data.name.lastName }` }}</div>
+                <!-- No result -->
+                <div v-else class="no-result apollo">{{ item.forwardedName }}</div>
+              </template>
+            </ApolloQuery>
+          </div>
           <div style="margin-top: 5px"></div>
           <div class="content">
             <div v-if="item.content._ === 'messageText'" v-text="item.content.text.text"></div>
@@ -126,7 +143,19 @@
             <div v-else-if="item.content._ === 'messageVideo'">
               <video controls v-bind:poster="'/api/file/' + item.contentFiles[0]" v-bind:src="'/api/file/' + (item.contentFiles[1] || item.contentFiles[0])"></video>
             </div>
+            <div v-else-if="item.content._ === 'messageAudio'">
+              <audio v-bind:src="'/api/file/' + item.contentFiles[0]" controls></audio>
+            </div>
+            <div v-else-if="item.content._ === 'messageDocument'">
+              <a v-bind:download="item.content.document.fileName" v-bind:href="'/api/file/' + item.contentFiles[0]">{{ item.content.document.fileName }}</a>
+            </div>
             <div v-else v-html="item.content"></div>
+            <div class="timestamp">
+              {{ item.createdAt | moment("calendar") }}
+              <template v-if="item.deleted">
+                <br>deleted {{ item.deletedAt | moment("calendar") }}
+              </template>
+            </div>
           </div>
         </div>
       </div>
@@ -165,6 +194,12 @@ const FETCH = gql`
         peer
         from
         fromType
+
+        forwardedName
+        forwardedFrom
+        forwardedDate
+        forwardedType
+
         content
         contentFiles
         edits
@@ -337,6 +372,12 @@ export default {
 .message.deleted .content {
   background-color: red;
 }
+
+.timestamp {
+  font-size: 0.75rem;
+  font-family: monospace;
+}
+
 .chat-container .username {
   font-size: 18px;
   font-weight: bold;
