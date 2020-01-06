@@ -6,7 +6,6 @@
         Safetygram&nbsp;
         <span class="font-weight-light">Beta</span>
       </span>
-
       <v-text-field solo-inverted flat hide-details label="Search" prepend-inner-icon="search" />
       <v-spacer />
     </v-app-bar>
@@ -20,7 +19,15 @@
             </v-col>
           </v-row>
           <v-divider v-else-if="item.divider" :key="i" dark class="my-4" />
-          <v-list-item v-else :key="i" link v-bind:to="item.link">
+          <v-list-item v-else-if="item.href" :key="i" link v-bind:href="item.href" target="_blank">
+            <v-list-item-action>
+              <v-icon>{{ item.icon }}</v-icon>
+            </v-list-item-action>
+            <v-list-item-content>
+              <v-list-item-title class="grey--text">{{ item.text }}</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+          <v-list-item v-else-if="item.link" :key="i" link v-bind:to="item.link">
             <v-list-item-action>
               <v-icon>{{ item.icon }}</v-icon>
             </v-list-item-action>
@@ -69,7 +76,7 @@ export default {
       { icon: "settings", text: "Settings", link: "/settings" },
       //{ icon: "arrow_downward", text: "Downloads", link: "/downloads" },
       //{ icon: "folder", text: "Files", link: "/files" },
-      { icon: "help", text: "Help", link: "/help" },
+      { icon: "help", text: "Help", href: "https://github.com/cuddlycheetah/safetygram" },
     ]
   }),
   created() {

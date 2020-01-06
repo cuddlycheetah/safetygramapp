@@ -15,7 +15,6 @@ import SetupTelegram from '../components/SetupTelegram.vue'
 import Settings from '../components/Settings.vue'
 
 import RawQueryInterface from '../components/RawQueryInterface.vue'
-import HelpPage from '../components/HelpPage.vue'
 // import NotYetImplementedSite from '../components/NotYetImplementedSite.vue'
 
 
@@ -78,10 +77,6 @@ const routes = [
         path: 'files',
         component: NotYetImplementedSite
       },*/
-      {
-        path: 'help',
-        component: HelpPage
-      },
       {
         path: 'setup',
         component: SetupTelegram
