@@ -57,6 +57,9 @@ export default {
       error: '',
     };
   },
+  mounted() {
+    this.$vuetify.theme.dark = localStorage.getItem('darkTheme') == 1
+  },
   methods: {
     login() {
       axios.post('/api/login', { password: this.password })

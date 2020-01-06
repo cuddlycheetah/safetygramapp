@@ -40,7 +40,7 @@
         <v-divider dark class="my-4" />
         <v-list-item>
           <v-list-item-action>
-          <v-switch v-model="$vuetify.theme.dark"></v-switch>
+          <v-switch v-model="darkTheme"></v-switch>
           </v-list-item-action>
           <v-list-item-content>
             <v-list-item-title class="grey--text">Dark Theme</v-list-item-title>
@@ -89,7 +89,8 @@ export default {
       { icon: "new_releases", text: "News & Updates", href: "https://t.me/Safetygram" },
       { icon: "help", text: "Help (Wiki)", href: "https://github.com/cuddlycheetah/safetygram/wiki/Help" },
       { icon: "live_help", text: "Support Chat", href: "https://t.me/joinchat/AmGzaUvpit2VP-g4V5NDdA" },
-    ]
+    ],
+    darkTheme: localStorage.getItem('darkTheme'),
   }),
   created() {
     if (localStorage.getItem('token') === null) {
@@ -97,6 +98,16 @@ export default {
     }
   },
   mounted() {
+    this.$vuetify.theme.dark = localStorage.getItem('darkTheme') == 1
+    this.darkTheme = this.$vuetify.theme.dark
+  },
+  watch: {
+    darkTheme: function(val) {
+      this.$vuetify.theme.dark = val
+      try {
+        localStorage.setItem('darkTheme', val ? 1 : 0)
+      } catch (e) { console.error(e) }
+    }
   },
   methods: {
     logout() {

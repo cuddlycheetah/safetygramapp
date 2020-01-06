@@ -1,5 +1,5 @@
 <template>
-  <div class="chat-container">
+  <div class="chat-container deletedHistory">
     <div style="display: flex; flex-direction: column-reverse;">
         <div class="message" :class="{ own: item.isOutgoing, deleted: item.deleted, [item.content._ ]: true }" v-for="(item, $index) in messages" :key="$index">
           <div class="content">
@@ -125,3 +125,8 @@ export default {
   },
 };
 </script>
+<style>
+.chat-container.deletedHistory {
+  height: 100%;
+}
+</style>

@@ -84,7 +84,7 @@
         </v-card>
       </v-menu>
     </v-toolbar>
-    <div class="chat-container infinite-wrapper">
+    <div class="chat-container infinite-wrapper" :class="{ dark: $vuetify.theme.dark }">
       <infinite-loading force-use-infinite-wrapper=".infinite-wrapper" direction="top" @infinite="infiniteHandler"></infinite-loading>
       <div style="display: flex; flex-direction: column-reverse;">
         <div class="message" :class="{ own: item.isOutgoing, deleted: item.deleted, [item.content._ ]: true }" v-for="(item, $index) in chatMsgs" :key="$index">
@@ -336,7 +336,7 @@ export default {
   height: calc(100vh - 9.5rem);
   overflow-y: auto;
   padding: 10px;
-  background-color: #f2f2f2;
+  /*background-color: #f2f2f2;*/
   font: 13px/18px Tahoma,sans-serif,Arial,Helvetica;
   font-weight: normal;
   font-size: 13px;
@@ -347,11 +347,24 @@ export default {
 .message.own {
   text-align: right;
 }
-.message.own .content {
+.chat-container .message .content {
+  background-color: lightgreen;
+}
+.chat-container .message.own .content {
   background-color: lightskyblue;
 }
-.message.deleted .content {
+.chat-container .message.deleted .content {
   background-color: red;
+}
+
+.chat-container.dark .message.deleted .content {
+  background-color: rgb(150, 0, 0);
+}
+.chat-container.dark .message.own .content {
+  background-color: rgb(47, 43, 245);
+}
+.chat-container.dark .message .content {
+  background-color: rgb(82, 82, 82);
 }
 
 .timestamp {
@@ -367,7 +380,6 @@ export default {
 .chat-container .content {
   text-align: initial;
   padding: 8px;
-  background-color: lightgreen;
   border-radius: 10px;
   display: inline-block;
   box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.14),

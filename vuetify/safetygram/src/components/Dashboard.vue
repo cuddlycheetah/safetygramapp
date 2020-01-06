@@ -1,5 +1,5 @@
 <template>
-  <v-container class="grey lighten-5">
+  <v-container>
     <v-row>
       <v-col cols="12" xs="12" sm="4" md="3">
         <v-card v-ripple>
