@@ -3,24 +3,31 @@
   <div class="chat-overview">
     <v-list three-line>
       <template v-for="option in options">
-        <v-list-item :key="option.key">
+        <v-list-item :key="option.key" :class="{ dirty: dirty[option.key] }">
           <v-list-item-content>
             <v-list-item-title>
               {{ option.desc }}
-              <pre style="font-size:0.8rem;">{{ option.key }}</pre>
+              <pre style="font-size:0.75rem;">{{ option.key }}</pre>
             </v-list-item-title>
             <v-list-item-action>
               <v-col cols="12" sm="6" md="6" v-if="option.key === 'password'">
-                <v-text-field type="password" placeholder="Specify a new Password" solo v-model="newPassword"></v-text-field>
-                <v-btn @click="changeOption(option.key, newPassword)">Change Password(and Logout)</v-btn>
+                <v-row cols="12">
+                  <v-text-field type="password" placeholder="Specify a new Password" @keyup="markDirty(option.key)" solo v-model="newPassword"></v-text-field>
+                    <v-btn @click="changeOption(option.key, option.value)" large raised v-if="dirty[option.key]">Change Password</v-btn>
+                    <v-btn @click="changeOption(option.key, option.value)" large disabled v-else>Change Password</v-btn>
+                </v-row>
               </v-col>
               <v-col cols="12" sm="6" md="6" v-else>
                 <!-- bool -->
                 <v-switch v-if="option.type === 'bool'" @change="changeOption(option.key, option.value)" v-model="option.value">Value</v-switch>
                 <!-- string -->
                 <template v-else-if="option.type === 'string'">
-                  <v-text-field v-bind:placeholder="option.default" solo v-model="option.value"></v-text-field>
-                  <v-btn @click="changeOption(option.key, option.value)">Change Value</v-btn>
+                  <v-row cols="12">
+                    <v-text-field v-bind:placeholder="option.default" @keyup="markDirty(option.key)" solo v-model="option.value"></v-text-field>
+                    <v-btn @click="changeOption(option.key, option.value)"  x-large raised v-if="dirty[option.key]">Save & Apply</v-btn>
+                    <v-btn @click="changeOption(option.key, option.value)"  x-large disabled v-else>Save & Apply</v-btn>
+                    <v-btn @click="changeOption(option.key, option.default); option.value = option.default" x-large raised>Reset</v-btn>
+                  </v-row>
                 </template>
                 <!-- filesize -->
                 <template v-else-if="option.type === 'filesize'">
@@ -29,8 +36,14 @@
                 </template>
                 <!-- keepTimeDays -->
                 <template v-else-if="option.type === 'keepTimeDays'">
-                  <v-slider v-model="option.value" step="1" min="0" max="1000" @change="changeOption(option.key, option.value)"></v-slider>
-                  <span>{{ [option.value, 'days'] | duration('humanize') }}</span>
+                  <v-row cols="12">
+                    <v-slider v-model="option.value" step="1" min="-1" max="365" @change="markDirty(option.key)"></v-slider>
+                    <v-btn @click="changeOption(option.key, option.value)" x-large raised v-if="dirty[option.key]">Save & Apply</v-btn>
+                    <v-btn @click="changeOption(option.key, option.value)" x-large disabled v-else>Save & Apply</v-btn>
+                    <v-btn @click="changeOption(option.key, option.default); option.value = option.default" x-large raised>Reset</v-btn>
+                  </v-row>
+                  <span v-if="option.value === -1">forever</span>
+                  <span v-else>{{ [option.value, 'days'] | duration('humanize') }} {{ option.value }}d</span>
                 </template>
 
                 <!-- anything else -->
@@ -75,18 +88,30 @@ export default {
   apollo: {
     options: {
       query: FETCH,
-      pollInterval: 5000
+      pollInterval: 5000,
     }
   },
   data() {
     return {
+      dirty: {},
       newPassword: '',
     }
   },
+  watch: {
+    dirty(){
+    //do something
+    }
+  },
   methods: {
+    markSaved(key) {
+      this.$set(this.dirty, key , false)
+    },
+    markDirty(key) {
+      this.$set(this.dirty, key, true)
+      //this.dirty[ key ] = true
+    },
     changeOption(key, value) {
-      console.log('changeOption', key, value)
-      this.$apollo.mutate({
+      return this.$apollo.mutate({
         mutation: changeOption,
         variables: {
           key: key,
@@ -94,6 +119,7 @@ export default {
         },
       })
       .then(() => {
+        this.markSaved(key)
         if (key === 'password') {
           localStorage.clear();
           this.$router.push('/login');
@@ -103,3 +129,8 @@ export default {
   }
 };
 </script>
+<style>
+.dirty {
+  background-color: rgba(255,0,0,0.3);
+}
+</style>

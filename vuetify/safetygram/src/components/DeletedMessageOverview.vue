@@ -1,5 +1,4 @@
 <template>
-
   <div class="chat-container">
     <div style="display: flex; flex-direction: column-reverse;">
         <div class="message" :class="{ own: item.isOutgoing, deleted: item.deleted, [item.content._ ]: true }" v-for="(item, $index) in messages" :key="$index">
@@ -30,7 +29,7 @@
                   <!-- Loading -->
                   <div v-if="loading" class="loading apollo">Loading Name...</div>
                   <!-- Error -->
-                  <div v-else-if="error" class="error apollo">An error occurred forwardedFrom</div>
+                  <div v-else-if="error" class="error apollo">{{ item.forwardedName }}</div>
                   <!-- Result -->
                   <div v-else-if="data" class="result apollo">{{ data.name.name || `${ data.name.firstName } ${ data.name.lastName }` }}</div>
                   <!-- No result -->
@@ -56,31 +55,40 @@
               </ApolloQuery>
             </div>
             <div style="margin-top: 5px"></div>
-            <div v-if="item.content._ === 'messageText'" v-text="item.content.text.text"></div>
-            <div v-else-if="item.content._ === 'messagePhoto'">
-              <v-img v-bind:src="'/api/file/' + item.contentFiles[1]"></v-img>
+            <div v-for="(entry, $index) in [{newContent: item.content, date: item.createdAt}, ...item.edits]" :key="$index">
+              <div v-if="entry.newContent._ === 'messageText'" v-text="entry.newContent.text.text"></div>
+              <div v-else-if="entry.newContent._ === 'messagePhoto'">
+                <v-img v-bind:src="'/api/file/' + item.contentFiles[1]"></v-img>
+                <div v-text="entry.newContent.caption.text"></div>
+              </div>
+              <div v-else-if="entry.newContent._ === 'messageSticker'">
+                <img v-bind:src="'/api/file/' + item.contentFiles[0]">
+              </div>
+              <div v-else-if="entry.newContent._ === 'messageVoiceNote'">
+                <audio v-bind:src="'/api/file/' + item.contentFiles[0]" controls></audio>
+              </div>
+              <div v-else-if="entry.newContent._ === 'messageVideoNote'">
+                <video controls v-bind:poster="'/api/file/' + item.contentFiles[0]" v-bind:src="'/api/file/' + item.contentFiles[1]"></video>
+              </div>
+              <div v-else-if="entry.newContent._ === 'messageAnimation'">
+                <video loop autoplay controls v-bind:poster="'/api/file/' + item.contentFiles[0]" v-bind:src="'/api/file/' + item.contentFiles[1]"></video>
+              </div>
+              <div v-else-if="entry.newContent._ === 'messageVideo'">
+                <video controls v-bind:poster="'/api/file/' + item.contentFiles[0]" v-bind:src="'/api/file/' + (item.contentFiles[1] || item.contentFiles[0])"></video>
+              </div>
+              <div v-else-if="entry.newContent._ === 'messageAudio'">
+                <audio v-bind:src="'/api/file/' + item.contentFiles[0]" controls></audio>
+              </div>
+              <div v-else-if="entry.newContent._ === 'messageDocument'">
+                <a v-bind:download="item.content.document.fileName" v-bind:href="'/api/file/' + item.contentFiles[0]">{{ item.content.document.fileName }}</a>
+              </div>
+              <div v-else v-html="entry.newContent"></div>
+              <div class="timestamp">
+                {{ entry.date | moment("calendar") }}
+              </div>
             </div>
-            <div v-else-if="item.content._ === 'messageSticker'">
-              <img v-bind:src="'/api/file/' + item.contentFiles[0]">
-            </div>
-            <div v-else-if="item.content._ === 'messageVoiceNote'">
-              <audio v-bind:src="'/api/file/' + item.contentFiles[0]" controls></audio>
-            </div>
-            <div v-else-if="item.content._ === 'messageVideoNote'">
-              <video controls v-bind:poster="'/api/file/' + item.contentFiles[0]" v-bind:src="'/api/file/' + item.contentFiles[1]"></video>
-            </div>
-            <div v-else-if="item.content._ === 'messageAnimation'">
-              <video controls v-bind:poster="'/api/file/' + item.contentFiles[0]" v-bind:src="'/api/file/' + item.contentFiles[1]"></video>
-            </div>
-            <div v-else-if="item.content._ === 'messageVideo'">
-              <video controls v-bind:poster="'/api/file/' + item.contentFiles[0]" v-bind:src="'/api/file/' + (item.contentFiles[1] || item.contentFiles[0])"></video>
-            </div>
-            <div v-else v-html="item.content"></div>
-            <div class="timestamp">
-              {{ item.createdAt | moment("calendar") }}
-              <template v-if="item.deleted">
-                <br>deleted {{ item.deletedAt | moment("calendar") }}
-              </template>
+            <div class="timestamp" v-if="item.deleted">
+              <br>deleted {{ item.deletedAt | moment("calendar") }}
             </div>
           </div>
         </div>
@@ -112,7 +120,7 @@ export default {
   apollo: {
     messages: {
       query: FETCH,
-      pollInterval: 15000
+      pollInterval: 5000
     }
   },
 };

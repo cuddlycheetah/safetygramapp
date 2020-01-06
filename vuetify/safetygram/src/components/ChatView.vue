@@ -113,7 +113,7 @@
                 <!-- Loading -->
                 <div v-if="loading" class="loading apollo">Loading Name...</div>
                 <!-- Error -->
-                <div v-else-if="error" class="error apollo">An error occurred</div>
+                <div v-else-if="error" class="error apollo">{{ item.forwardedName }}</div>
                 <!-- Result -->
                 <div v-else-if="data" class="result apollo">{{ data.name.name || `${ data.name.firstName } ${ data.name.lastName }` }}</div>
                 <!-- No result -->
@@ -154,9 +154,9 @@
                 {{ entry.date | moment("calendar") }}
               </div>
             </div>
-              <div class="timestamp" v-if="item.deleted">
-                <br>deleted {{ item.deletedAt | moment("calendar") }}
-              </div>
+            <div class="timestamp" v-if="item.deleted">
+              <br>deleted {{ item.deletedAt | moment("calendar") }}
+            </div>
           </div>
         </div>
       </div>

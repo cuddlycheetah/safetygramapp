@@ -10,8 +10,8 @@
       <v-spacer />
     </v-app-bar>
 
-    <v-navigation-drawer v-model="drawer" app clipped color="grey lighten-4">
-      <v-list dense class="grey lighten-4">
+    <v-navigation-drawer v-model="drawer" app clipped>
+      <v-list dense>
         <template v-for="(item, i) in items">
           <v-row v-if="item.heading" :key="i" align="center">
             <v-col cols="6">
@@ -37,6 +37,15 @@
           </v-list-item>
         </template>
 
+        <v-divider dark class="my-4" />
+        <v-list-item>
+          <v-list-item-action>
+          <v-switch v-model="$vuetify.theme.dark"></v-switch>
+          </v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title class="grey--text">Dark Theme</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
         <v-divider dark class="my-4" />
         <v-list-item link @click="logout()">
           <v-list-item-action>
