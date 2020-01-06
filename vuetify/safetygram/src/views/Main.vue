@@ -76,7 +76,10 @@ export default {
       { icon: "settings", text: "Settings", link: "/settings" },
       //{ icon: "arrow_downward", text: "Downloads", link: "/downloads" },
       //{ icon: "folder", text: "Files", link: "/files" },
-      { icon: "help", text: "Help", href: "https://github.com/cuddlycheetah/safetygram" },
+      { divider: true },
+      { icon: "new_releases", text: "News & Updates", href: "https://t.me/Safetygram" },
+      { icon: "help", text: "Help (Wiki)", href: "https://github.com/cuddlycheetah/safetygram/wiki/Help" },
+      { icon: "live_help", text: "Support Chat", href: "https://t.me/joinchat/AmGzaUvpit2VP-g4V5NDdA" },
     ]
   }),
   created() {
