@@ -82,6 +82,7 @@ export default {
       //{ icon: "archive", text: "Archive", link: "/archive" },
       { icon: "delete", text: "Deleted Messages", link: "/deletedmsgs" },
       { divider: true },
+      { icon: "build", text: "Operations", link: "/operations" },
       { icon: "settings", text: "Settings", link: "/settings" },
       //{ icon: "arrow_downward", text: "Downloads", link: "/downloads" },
       //{ icon: "folder", text: "Files", link: "/files" },

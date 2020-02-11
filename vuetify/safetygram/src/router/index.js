@@ -17,6 +17,7 @@ import Settings from '../components/Settings.vue'
 import RawQueryInterface from '../components/RawQueryInterface.vue'
 // import NotYetImplementedSite from '../components/NotYetImplementedSite.vue'
 
+import Operations from '../components/Operations'
 
 Vue.use(VueRouter)
 
@@ -77,6 +78,10 @@ const routes = [
         path: 'files',
         component: NotYetImplementedSite
       },*/
+      {
+        path: 'operations',
+        component: Operations
+      },
       {
         path: 'setup',
         component: SetupTelegram

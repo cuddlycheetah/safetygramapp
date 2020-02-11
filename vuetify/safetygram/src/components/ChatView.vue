@@ -285,7 +285,7 @@ export default {
         },
       })
       .then(() => {
-        // TODO: add ui feedback for import start
+        this.$router.push('/operations');
       })
     },
     infiniteHandler($state) {

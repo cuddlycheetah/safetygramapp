@@ -8,7 +8,6 @@
           <v-list-item-avatar>
             <v-img v-bind:src="'/api/file/' + chat.photo"></v-img>
           </v-list-item-avatar>
-
           <v-list-item-content>
             <v-list-item-title v-html="chat.name"></v-list-item-title>
           </v-list-item-content>
@@ -33,8 +32,8 @@ const FETCH = gql`{
 export default {
   apollo: {
     chatOverview: {
-        query: FETCH,
-        pollInterval: 5000
+      query: FETCH,
+      pollInterval: 5000
     }
   },
 };
