@@ -12,9 +12,9 @@
             <v-list-item-action>
               <v-col cols="12" sm="6" md="6" v-if="option.key === 'password'">
                 <v-row cols="12">
-                  <v-text-field type="password" placeholder="Specify a new Password" @keyup="markDirty(option.key)" solo v-model="option.value"></v-text-field>
-                    <v-btn @click="changeOption(option.key, option.value)" large raised v-if="dirty[option.key]">Change Password</v-btn>
-                    <v-btn @click="changeOption(option.key, option.value)" large disabled v-else>Change Password</v-btn>
+                  <v-text-field type="password" placeholder="Specify a new Password" @keyup="markDirty(option.key)" solo v-model="newPassword"></v-text-field>
+                    <v-btn @click="changeOption(option.key, newPassword)" large raised v-if="dirty[option.key]">Change Password</v-btn>
+                    <v-btn @click="changeOption(option.key, newPassword)" large disabled v-else>Change Password</v-btn>
                 </v-row>
               </v-col>
               <v-col cols="12" sm="6" md="6" v-else>
